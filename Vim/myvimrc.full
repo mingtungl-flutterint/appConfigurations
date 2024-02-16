@@ -1,0 +1,565 @@
+" Modeline and Notes {
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=syntax spell:
+" }
+
+" Identify platforms {
+silent function! OSX()
+    return has('macunix')
+endfunction
+
+silent function! LINUX()
+    return has('unix') && !has('macunix') && !has('win32unix')
+ endfunction
+
+ silent function! CYGWIN()
+    return has('win32unix')
+endfunction
+
+silent function! WINDOWS()
+    "return (has('windows'))
+    return (has('win16') || has('win32') || has('win64'))
+ endfunction
+" } Identify platform
+
+" Environment {
+    set nocompatible        " Must be first line
+    set t_Co=256
+    " Disable stupid backup and swap files - they trigger too many events
+	" for file system watchers
+	set nobackup
+	set nowritebackup
+    set autoread
+    set autowrite
+    "set noswapfile "" IMPORTANT: comment this line if you are working on a remote host
+    set wildignore=*.o,*.obj,*.bak,*.exe,*.py[co],*.swp,*~,*.pyc,.svn
+	" make yank copy to the global system clipboard
+	set clipboard=unnamed
+    set encoding=utf8
+    set termencoding=utf-8
+    set fileencodings=          " Don't do any encoding conversion
+    " swapfile	use a swap file for this buffer (local to buffer)
+    set noswf
+    " swapsync	"sync", "fsync" or empty; how to flush a swap file to disk
+    set sws=fsync
+" } Environment
+
+" Plugin manager {
+    " Required:
+    filetype off
+
+    "" set the runtime path to include Vundle and initialize
+    set rtp+=~/.vim/bundle/Vundle.vim
+    call vundle#begin()
+
+    Plugin 'gmarik/Vundle.vim'
+    Plugin 'bling/vim-airline'
+    Plugin 'Valloric/YouCompleteMe'
+    Plugin 'scrooloose/syntastic'
+   
+    " All of your Plugins must be added before the following line
+    call vundle#end()            " required
+
+" } Plugin manager
+
+" Extra plugins {
+    set runtimepath^=~/.vim/bundle/ctrlp.vim
+" } Extra plugins
+
+" Use before config if available {
+    if filereadable(expand("~/.vimrc.before"))
+        source ~/.vimrc.before
+    endif
+    " }
+
+" General {
+    filetype plugin indent on   " Automatically detect file types.
+    set ff=unix
+    set background=dark
+    "set background=light
+    syntax on                   " Syntax highlighting
+    set mouse=a                 " Automatically enable mouse usage
+    set mousehide               " Hide the mouse cursor while typing
+    scriptencoding utf-8
+
+    "set autowrite                       " Automatically write a file when leaving a modified buffer
+    set shortmess+=filmnrxoOtT          " Abbrev. of messages (avoids 'hit enter')
+    set viewoptions=folds,options,cursor,unix,slash " Better Unix / Windows compatibility
+    set virtualedit=onemore             " Allow for cursor beyond last character
+    set history=1000                    " Store a ton of history (default is 20)
+    set spell                           " Spell checking on
+    set hidden                          " Allow buffer switching without saving
+    set cindent
+    set title
+
+    set showmode                    " Display the current mode
+"    set cursorline                  " Highlight current line
+
+"    highlight clear SignColumn      " SignColumn should match background
+"    highlight clear LineNr          " Current line number row will have same background color in relative mode
+"    let g:CSApprox_hook_post = ['hi clear SignColumn']
+    "highlight clear CursorLineNr    " Remove highlight color from current line number
+
+    set ruler                   " Show the ruler
+    set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " A ruler on steroids
+    set showcmd                 " Show partial commands in status line and
+                                    " Selected characters/lines in visual mode
+
+    set laststatus=2
+    set matchtime=2         " show matching bracket for 0.2 seconds
+    " Broken down into easily includeable segments
+    set statusline=%<%f\                     " Filename
+    set statusline+=%w%h%m%r                 " Options
+    "set statusline+=%{fugitive#statusline()} " Git Hotness
+    set statusline+=\ [%{&ff}/%Y]            " Filetype
+    set statusline+=\ [%{getcwd()}]          " Current dir
+    set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
+
+    set backspace=indent,eol,start  " Backspace for dummies
+    set linespace=0                 " No extra spaces between rows
+    set nu                          " Line numbers on
+    set showmatch                   " Show matching brackets/parenthesis
+    set incsearch                   " Find as you type search
+    set hlsearch                    " Highlight search terms
+    set ignorecase                  " Case insensitive search
+    set smartcase                   " Case sensitive when uc present
+    set wildmenu                    " Show list instead of just completing
+    set wildmode=list:longest,full  " Command <Tab> completion, list matches, then longest common part, then all.
+    "set whichwrap=b,s,h,l,<,>,[,]   " Backspace and cursor keys wrap too
+    set scrolljump=5                " Lines to scroll when cursor leaves screen
+    set scrolloff=2                 " Minimum lines to keep above and below cursor
+    set foldenable                  " Auto fold code
+    set foldmethod=syntax
+    set winminheight=0              " Windows can be 0 line high
+    set nolist
+    set listchars=tab:â€º\ ,trail:â€¢,extends:#,nbsp:. " Highlight problematic whitespace
+
+" } General
+
+" Vim UI {
+
+    " Set font name:type:size
+    set guifont=DejaVu_Sans_Mono:h9:cANSI
+    "set gfn=Droid_Sans_Mono:h8:b:cANSI  " bold fint
+    "set gfn=Droid_Sans_Mono:h8:cANSI  " regular font
+
+    if !has('gui')
+        set term=$TERM          " Make arrow and other keys work
+    endif
+
+    if filereadable(expand("$HOME/.vim/colors/solarized.vim"))
+        colorscheme solarized
+        let g:solarized_termcolors=256
+        let g:solarized_termtrans=1
+        let g:solarized_contrast="high"
+        let g:solarized_visibility="high"
+    else
+        colorscheme desert
+    endif
+
+    if has( "gui_running" )
+        set background=light
+        set lines=48 columns=120
+    else
+        set background=dark
+
+        if exists("+lines")
+            set lines=48
+        endif
+        if exists("+columns")
+            set columns=140
+        endif
+    endif
+
+    set tabpagemax=15               " Only show 15 tabs
+    set showmode                    " Display the current mode
+
+    if has('cmdline_info')
+        set ruler                   " Show the ruler
+        set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " A ruler on steroids
+        set showcmd                 " Show partial commands in status line and
+        " Selected characters/lines in visual mode
+    endif
+
+    if has('statusline')
+        set laststatus=2
+
+        "set statusline=[%n]\ %<%F\ \ \ [%M%R%H%W%Y][%{&ff}]\ \ %=\ line:%l/%L\ col:%c\ \ \ %p%%\ \ \ @%{strftime(\"%H:%M:%S\")}    
+        " Broken down into easily includeable segments
+        set statusline=%<%f\                     " Filename
+        set statusline+=%w%h%m%r                 " Options
+        "    set statusline+=%{fugitive#statusline()} " Git Hotness
+        set statusline+=\ [%{&ff}/%Y]            " FileType
+        set statusline+=\ [%{getcwd()}]          " Current dir
+        set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
+    endif
+
+    "set cursorline                  " Highlight current line
+    "highlight clear SignColumn      " SignColumn should match background
+    "highlight clear LineNr          " Current line number row will have same background color in relative mode
+    "let g:CSApprox_hook_post = ['hi clear SignColumn']
+    "highlight clear CursorLineNr    " Remove highlight color from current line number
+    " Show cursorline only in active window
+    augroup CursorLineOnlyInActiveWindow
+    autocmd!
+    autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+    autocmd WinLeave * setlocal nocursorline
+    augroup END 
+
+    " show colorcolumn in insert mode: to remind me when my code line is too long or nesting is too deep
+    "set colorcolumn=80  " this sets color column at all times
+    highlight ColorColumn ctermbg=black
+    highlight ColorColumn guibg=lightgreen
+    " set color column only in insert mode
+    augroup ColorcolumnOnlyInInsertMode
+    autocmd!
+    autocmd InsertEnter * setlocal colorcolumn=80
+    autocmd InsertLeave * setlocal colorcolumn=0
+    augroup END 
+
+    "" with www/xxx three digit colors taken from this palette 
+    "" https://upload.wikimedia.org/wikipedia/en/1/15/Xterm_256color_chart.svg
+    "" and #yyyyyy/#zzzzzz
+    "hi SpellBad ctermfg=009 ctermbg=009 guifg=#ff0000 guibg=#ff0000
+    "hi SpellCap ctermfg=011 ctermbg=011 guifg=#ffff00 guibg=#ffff00
+    hi YCMerror term=reverse cterm=reverse ctermfg=230 ctermbg=235 guifg=Red
+    hi YCMwarn term=reverse cterm=reverse ctermfg=230 ctermbg=235 guifg=Yellow
+
+" } Vim UI
+
+" Formatting {
+
+    set nowrap                      " Do not wrap long lines
+    set autoindent                  " Indent at the same level of the previous line
+    set shiftwidth=4                " Use indents of 4 spaces
+    set expandtab                   " Tabs are spaces, not tabs
+    set tabstop=4                   " An indentation every four columns
+    set softtabstop=4               " Let backspace delete indent
+    set nojoinspaces                " Prevents inserting two spaces after punctuation on a join (J)
+    set splitright                  " Puts new vsplit windows to the right of the current
+    set splitbelow                  " Puts new split windows to the bottom of the current
+    set matchpairs+=<:>             " Match, to be used with %
+    set pastetoggle=<F12>           " pastetoggle (sane indentation on pastes)
+
+    let xml_syntax_folding=1      " XML
+    au FileType xml setlocal foldmethod=syntax
+
+    " Put these in an autocmd group, so that we can delete them easily.
+    augroup mysettings
+        au FileType xslt,xml,css,html,xhtml,docbook set smartindent shiftwidth=2 softtabstop=2 expandtab
+        au FileType javascript,sh,config,h,hpp,c,cpp set smartindent shiftwidth=4 softtabstop=4 expandtab
+        au FileType tex set wrap shiftwidth=2 softtabstop=2 expandtab
+
+    " Confirm to PEP8
+        au FileType python set tabstop=4 softtabstop=4 expandtab shiftwidth=4 cinwords=if,elif,else,for,while,try,except,finally,def,class
+    augroup END
+
+    " in makefiles, don't expand tabs to spaces, since actual tab characters
+    " are needed, and have indentation at 8 chars to be sure that all indents
+    " are tabs (despite the mappings later):
+     autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0
+
+" } Formatting 
+
+" Key (re)Mappings {
+
+    let mapleader = ','
+
+    nnoremap <C-J> <C-W><C-J>
+    nnoremap <C-K> <C-W><C-K>
+    nnoremap <C-L> <C-W><C-L>
+    nnoremap <C-H> <C-W><C-H>
+    " More natural split opening
+    " Open new split panes to right and bottom, which feels more natural than default Vim behaviour.
+
+    set splitbelow
+    set splitright
+    let g:netrw_altv = 1 " when navigating a folder,
+                         " hitting <v> opens a window at right side (default
+                         " is left side)
+
+    " Code folding options
+    nmap <leader>f0 :set foldlevel=0<CR>
+    nmap <leader>f1 :set foldlevel=1<CR>
+
+    " Shortcuts
+    " Change Working Directory to that of the current file
+    cmap cwd lcd %:p:h
+    cmap cd. lcd %:p:h
+
+    " Visual shifting (does not exit Visual mode)
+    vnoremap < <gv
+    vnoremap > >gv
+
+    " Allow using the repeat operator with a visual selection (!)
+    " http://stackoverflow.com/a/8064607/127816
+    vnoremap . :normal .<CR>
+
+    " Adjust viewports to the same size
+    map <Leader>= <C-w>=
+
+    " Easier horizontal scrolling
+    "ap zl zL
+    "ap zh zH
+
+    " FIXME: Revert this f70be548
+    " fullscreen mode for GVIM and Terminal, need 'wmctrl' in you PATH
+    map <silent> <F11> :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
+
+    " some key bindings for tabs
+    " [Ctrl]+T plus a directional arrow to go to the tab:
+    "   up: " to go to the first tab
+    "   down: to got to the last
+    "   left: to go to the previous tab.
+    "   right: to go to the next tab.
+    map <C-t><up> :tabr<cr>
+    map <C-t><down> :tabl<cr>
+    map <C-t><left> :tabp<cr>
+    map <C-t><right> :tabn<cr>
+" } Key (re)Mappings
+
+" Code folding {
+
+" za: Toggle code folding at the current line. The block that the current line belongs to is folded (closed) or unfolded (opened).
+" zo: Open fold.
+" zc: Close fold.
+" zR: Open all folds.
+" zM: Close all folds.
+" Keep all folds open when a file is opened
+    augroup OpenAllFoldsOnFileOpen
+     autocmd!
+     autocmd BufRead * normal zR
+    augroup END  
+" } Code folding
+
+" Plugins {
+""" YCM {
+    if g:ycm_enable
+    "if exists('g:ycm_enable')
+        " { 
+        "" YouCompleteMe options
+        "
+        let g:ycm_register_as_syntastic_checker = 0 "default 1
+        let g:Show_diagnostics_ui = 1 "default 1
+        "
+        ""will put icons in Vim's gutter on lines that have a diagnostic set.
+        "Turning this off will also turn off the YcmErrorLine and YcmWarningLine
+        ""highlighting
+        let g:ycm_enable_diagnostic_signs = 1
+        let g:ycm_enable_diagnostic_highlighting = 0
+        let g:ycm_always_populate_location_list = 1 "default 0
+        let g:ycm_open_loclist_on_ycm_diags = 1 "default 1
+        let g:ycm_error_symbol = '>>'
+        let g:ycm_warning_symbol = '!!'
+        "" When set to  1 , the OmniSharp server will be automatically started 
+        "" or stopped (once per Vim session) when you open a C# file.
+        let g:ycm_auto_start_csharp_server = 1
+        let g:ycm_auto_stop_csharp_server = 1
+        let g:ycm_min_num_of_chars_for_completion = 1
+        let g:ycm_cache_omnifunc = 0
+        let g:ycm_seed_identifiers_with_syntax = 1
+        let g:ycm_complete_in_comments = 1
+        let g:ycm_complete_in_strings = 1
+        let g:ycm_collect_identifiers_from_tags_files = 1
+        let g:ycm_path_to_python_interpreter = '' "default ''
+
+        let g:ycm_server_use_vim_stdout = 0 "default 0 (logging to console)
+        let g:ycm_server_log_level = 'info' "default info
+        let g:ycm_extra_conf_vim_data = ['&filetype'] 
+        let g:ycm_global_ycm_extra_conf = '$HOME/.ycm_extra_conf.py'  "where to search for .ycm_extra_conf.py if not found
+        let g:ycm_confirm_extra_conf = 0 "no annoying tips on vim starting
+
+        let g:ycm_goto_buffer_command = 'same-buffer' "[ 'same-buffer', 'horizontal-split', 'vertical-split', 'new-tab' ]
+        let g:ycm_filetype_whitelist = { '*': 1 }
+        let g:ycm_key_invoke_completion = '<C-Space>'
+        
+        let g:ycm_collect_identifiers_from_comments_and_strings = 0
+        let g:ycm_filetype_blacklist = {'tex' : 1, 'markdown' : 1, 'text' : 1, 'html' : 1}
+        let g:syntastic_ignore_files = [".*\.py$"] "python has its own check engine
+        "let g:ycm_semantic_triggers = {}
+        "let g:ycm_semantic_triggers.c = ['->', '.', ' ', '(', '[', '&']
+        "set completeopt = longest,menu
+        autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+        nmap <leader>gd :YcmDiags<CR>
+        nnoremap <leader>gl :YcmCompleter GoToDeclaration<CR>
+        nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
+        nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
+        nnoremap <F11> :YcmForceCompileAndDiagnostics <CR>
+        " }
+    endif    
+""" } YCM
+
+""" OmniComplete {
+    """ To disable omni complete, add the following to .vimrc.before file:
+    """   let g:omni_complete = 0
+    if g:omni_complete_enable
+    "if exists('g:omni_complete_enable')
+        if has("autocmd") && exists("+omnifunc")
+            autocmd Filetype *
+                \if &omnifunc == "" |
+                \setlocal omnifunc=syntaxcomplete#Complete |
+                \endif
+        endif
+
+        hi Pmenu  guifg=#000000 guibg=#F8F8F8 ctermfg=black ctermbg=Lightgray
+        hi PmenuSbar  guifg=#8A95A7 guibg=#F8F8F8 gui=NONE ctermfg=darkcyan ctermbg=lightgray cterm=NONE
+        hi PmenuThumb  guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermbg=darkcyan cterm=NONE
+
+        " Some convenient mappings
+        inoremap <expr> <Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
+        inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>"
+        inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+        inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
+        inoremap <expr> <C-d>      pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+        inoremap <expr> <C-u>      pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+
+        " Automatically open and close the popup menu / preview window
+        au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+        set completeopt=menu,preview,longest
+    endif
+""" } OmniComplete
+
+" Crtl-P {
+    if g:ctrlp_enable
+        let g:ctrlp_map = '<c-p>'
+        let g:ctrlp_working_path_mode = 'ra'
+        set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
+        "set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+
+        " let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+        let g:ctrlp_custom_ignore = {
+                 \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+                 \ 'file': '\v\.(exe|so|dll)$',
+                 \ 'link': 'some_bad_symbolic_links',
+                 \ }
+        let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
+        let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
+
+        let g:ctrlp_working_path_mode = 'ra'
+        nnoremap <silent> <D-t> :CtrlP<CR>
+        nnoremap <silent> <D-r> :CtrlPMRU<CR>
+
+        " On Windows use "dir" as fallback command.
+        if WINDOWS()
+            let s:ctrlp_fallback = 'dir %s /-n /b /s /a-d'
+        elseif executable('ag')
+            let s:ctrlp_fallback = 'ag %s --nocolor -l -g ""'
+        elseif executable('ack')
+            let s:ctrlp_fallback = 'ack %s --nocolor -f'
+        else
+            let s:ctrlp_fallback = 'find %s -type f'
+        endif
+    endif    
+""" } ctrlp
+
+""" Ctags {
+    set tags=./tags;/,~/.vimtags
+    "set tags+=$HOME/core.tags
+    "autocmd FileType c,cpp,h,hpp setlocal tags=$HOME/tags-core,./tags;/,tags;/
+
+    " Make tags placed in .git/tags file available in all levels of a repository
+    let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
+    if gitroot != ''
+        let &tags = &tags . ',' . gitroot . '/.git/tags'
+    endif
+""" } Ctags
+
+    " easy-tag
+    " Tell EasyTags to use the tags file found by Vim
+    ""let g:easytags_dynamic_files = 1
+    "let g:easytags_cmd='C:\Windows\ctags.exe' """"'$VIMRUNTIME\ctags.exe'
+    "let g:easytags_opts=['--options=--c++-kinds=+defgmnpstux --languages= --languages=+c,c++ --fields=+iaS --extra=+q']
+
+""" Airline {
+    if g:airline_enable
+        if !exists('g:airline_symbols')
+            let g:airline_symbols = {}
+        endif
+
+        let g:airline_powerline_fonts=1
+        "let g:airline_theme="jellybeans"
+        "let g:airline_left_sep = ""
+        "let g:airline_right_sep = ""
+        let g:airline_section_b = '%{strftime("%c")}'
+        let g:airline_section_x = ''
+        let g:airline_section_y = 'BN: %{bufnr("%")}'
+        let g:airline_powerline_fonts = 1
+        let g:airline_them = 'solarized'
+        " unicode symbols
+        "let g:airline_left_sep = 'Â»'
+        let g:airline_left_sep = 'â–¶'
+        "let g:airline_right_sep = 'Â«'
+        let g:airline_right_sep = 'â—€'
+        let g:airline_symbols.linenr = 'âŠ'
+        let g:airline_symbols.linenr = 'â¤'
+        let g:airline_symbols.linenr = 'Â¶'
+        let g:airline_symbols.branch = 'âŽ‡'
+        let g:airline_symbols.paste = 'Ï'
+        let g:airline_symbols.paste = 'Ãž'
+        let g:airline_symbols.paste = 'âˆ¥'
+        let g:airline_symbols.whitespace = 'Îž'
+        hi link SyntasticError YCMerror
+        hi link SyntasticWarning YCMwarn
+    endif
+""" } Airline
+
+""" AutoCloseTag {
+    if g:autoclosetag_enable
+        " Make it so AutoCloseTag works for xml and xhtml files as well
+        au FileType xhtml,xml ru ftplugin/html/autoclosetag.vim
+        nmap <Leader>ac <Plug>ToggleAutoCloseMappings
+    endif
+""" } AutoCloseTag 
+
+""" syntastic {
+    if g:syntastic_enable
+        "set statusline=[%n]\ %<%F\ \ \ [%M%R%H%W%Y][%{&ff}]\ \ %=\ line:%l/%L\ col:%c\ \ \ %p%%\ \ \ @%{strftime(\"%H:%M:%S\")}    
+        " Broken down into easily includeable segments
+        set statusline=%<%f\                     " Filename
+        set statusline+=%w%h%m%r                 " Options
+        set statusline+=\ [%{&ff}/%Y]            " Filetype
+        set statusline+=\ [%{getcwd()}]          " Current dir
+        set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
+        set statusline+=%#warningmsg#
+        set statusline+=%{SyntasticStatuslineFlag()}
+        set statusline+=%*
+
+        let g:syntastic_always_populate_loc_list = 1
+        let g:syntastic_auto_loc_list = 1
+        let g:syntastic_check_on_open = 1
+        let g:syntastic_enable_signs=1
+        let g:syntastic_check_on_wq = 0
+
+        let g:syntastic_error_symbol = 'âœ—âœ—'
+        let g:syntastic_style_error_symbol = 'âœ âœ '
+        let g:syntastic_warning_symbol = 'âˆ†âˆ†'
+        let g:syntastic_style_warning_symbol = 'â‰ˆâ‰ˆ'
+        "let g:syntastic_error_symbol = "âœ—"
+        "let g:syntastic_warning_symbol = "âš "
+        "let g:syntastic_style_error_symbol = "X"
+        "let g:syntastic_style_warning_symbol = "!"
+        "" whether to show balloons
+        let g:syntastic_enable_balloons = 1
+        
+        let g:syntastic_cs_checkers = ['mcs']
+        let g:syntastic_cs_check_header = 1
+        let g:syntastic_cs_errorformat = '%f:%l:%c: %trror: %m'
+        let g:syntastic_cs_compiler = 'mcs'
+        let g:syntastic_cs_compiler_options = ' -v -g'
+
+        "let g:syntastic_cpp_compiler = 'clang++'
+        "let g:syntastic_cpp_compiler_options = '-std=c++11 -stdlib=libstdc++'
+        let g:syntastic_cpp_checkers = ['gcc']
+        let g:syntastic_cpp_check_header = 1
+        let g:syntastic_cpp_errorformat = '%f:%l:%c: %trror: %m'
+        let g:syntastic_c_compiler = 'gcc'
+        let g:syntastic_c_compiler_options = ' -ansi -pedantic'
+        let g:syntastic_cpp_compiler = "g++"
+        let g:syntastic_cpp_compiler_options = " -std=c++11 -Wall -Wextra -Wpedantic"
+
+        let g:syntastic_python_python_exec = '/usr/bin/python3'
+    endif
+""" } syntastic 
+
+" source autotag when reading/writing c++ files
+    "autocmd FileType c,cpp,C,c++,h,hpp, source autotag.vim
+" } Plugins

@@ -1,0 +1,85 @@
+" Modeline and Notes {
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=syntax spell:
+" }
+set nocompatible        " Must be first line
+set encoding=utf8
+set termencoding=utf-8
+
+"
+" Function to source only if file exists {
+silent function! SourceIfExists(file)
+  if filereadable(expand(a:file))
+    exe 'source' a:file
+  endif
+endfunction
+" }
+
+" Identify platforms {
+silent function! OSX()
+    return has('macunix')
+endfunction
+
+silent function! LINUX()
+    return has('unix') && !has('macunix') && !has('win32unix')
+ endfunction
+
+ silent function! CYGWIN()
+    return has('win32unix')
+endfunction
+
+silent function! WINDOWS()
+    "return (has('windows'))
+    return (has('win16') || has('win32') || has('win64'))
+ endfunction
+" } Identify platform
+
+" Use before config if available {
+	if LINUX()
+        call SourceIfExists("~/.vimrc.before")
+	endif
+	if WINDOWS()
+	    call SourceIfExists("$USERPROFILE/vimfiles/vimrc.before")
+	endif
+" }
+
+""" Load settings {
+    set rtp+=$USERPROFILE/vimfiles
+	if WINDOWS()
+		"set rtp+=$USERPROFILE/vimfiles
+        call SourceIfExists("$USERPROFILE/vimfiles/vimplug_manager.vim")
+        call SourceIfExists("$USERPROFILE/vimfiles/essential_settings.vim")
+        call SourceIfExists("$USERPROFILE/vimfiles/keymap_settings.vim")
+        call SourceIfExists("$USERPROFILE/vimfiles/autocmd_settings.vim")
+	endif
+
+	if LINUX()
+		"call SourceIfExists("~/.vim/vimplug_manager.vim")
+		call SourceIfExists("~/.vim/vundle_manager.vim")
+		call SourceIfExists("~/.vim/essential_settings.vim")
+		call SourceIfExists("~/.vim/keymap_settings.vim")
+	endif
+""" } end load settings
+
+""" Load Plugin settings {
+	if WINDOWS()
+		call SourceIfExists("$USERPROFILE/vimfiles/plugins_settings.vim")
+	endif
+	if LINUX()
+		call SourceIfExists("~/.vim/plugins_settings.vim")
+	endif
+""" } Load Plugin settings
+
+""" Use after config if available {
+    if LINUX()
+	    call SourceIfExists("~/.vimrc.after")
+	endif
+	if WINDOWS()
+	    call SourceIfExists("$USERPROFILE/vinfiles/vimrc.after")
+    endif
+""" }
+
+" Plantuml
+au FileType plantuml command! OpenUml :!start chrome %
+
+" } Plugin settings
+"

@@ -1,0 +1,70 @@
+" init.vim
+" Modeline and Notes {
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=syntax spell:
+" }
+""" Plugin settings {
+set nocompatible        " Must be first line
+set encoding=utf8
+set termencoding=utf-8
+
+"" Functions to identify platforms {
+silent function! OSX()
+    return has('macunix')
+endfunction
+
+silent function! LINUX()
+    return has('unix') && !has('macunix') && !has('win32unix')
+endfunction
+
+silent function! CYGWIN()
+    return has('win32unix')
+endfunction
+
+silent function! WINDOWS()
+    "return (has('windows'))
+    return (has('win16') || has('win32') || has('win64'))
+endfunction
+"" }
+
+""" runtimepath aka rtp
+"/home/ml/.config/nvim
+"/home/ml/.config/nvim/after
+"/home/ml/.local/share/nvim/site
+"/home/ml/.local/share/nvim/site/after
+
+"if WINDOWS()
+"    set rtp+=$USERPROFILE/vimfiles
+"endif
+
+" if LINUX()
+    " set rtp+=$HOME/.vim
+" endif
+
+" set rtp+=$LOCALAPPDATA\nvim\viml
+" Make sure the following files exist in rtp or VIMRUNTIME
+runtime! viml/vimrc.before
+"runtime! viml/vimrc.before
+"" Load settings {
+runtime! viml/vimplug.vim
+runtime! viml/settings.vim
+runtime! viml/keymappings.vim
+runtime! viml/autocmds.vim
+
+" Load plugin settings
+runtime! viml/plugins/devicons.vim
+runtime! viml/plugins/fzf.vim
+runtime! viml/plugins/rainbow.vim
+runtime! viml/plugins/vim_lsp.vim
+runtime! viml/plugins/vim_lsp_settings.vim
+" runtime! viml/plugins/gitgutter.vim
+" runtime! viml/plugins/coc.vim
+" runtime! viml/plugins/vim_cpp_enhanced_highlight.vim
+
+if WINDOWS()
+    runtime! init_windows.vim
+else
+    runtime! init_linux.vim
+endif
+
+runtime! viml/vimrc.after
+"" }

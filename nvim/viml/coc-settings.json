@@ -1,0 +1,37 @@
+{
+    "coc.preferences.formatOnSaveFiletypes": ["css", "javascript", "html", "yaml",  "json", "python"],
+    "coc.preferences.extensionUpdateCheck": "never",
+
+    // Linux
+    //"npm.binPath": "~/.nvm/versions/node/v14.7.1/bin/npm",
+
+    "eslint.autoFixOnSave": true,
+
+    // If use both TypeScript and FlowJS, set "tsserver.enableJavascript": false - disable TypeScript when editing js file
+    "tsserver.enableJavascript": false,
+
+    // python config
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.flake8Args": [ "--ignore=D205,D100,D102,D105,D106,D107,E501" ],
+
+    "languageserver": {
+        //"bash": {
+        //    "command": "bash-language-server",
+        //    "args": ["start"],
+        //    "filetypes": ["sh"],
+        //    "ignoredRootPaths": ["~"]
+        //}
+        //"clangd": {
+        //    "command": "clangd",
+        //    "rootPatterns": ["compile_flags.txt", "compile_commands.json"],
+        //    "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"]
+        //},
+        //"cmake": {
+        //    "command": "cmake-language-server",
+        //    "filetypes": ["cmake"],
+        //    "rootPatterns": [ "build/" ],
+        //    "initializationOptions": { "buildDirectory": "build" }
+        //}
+    }
+}

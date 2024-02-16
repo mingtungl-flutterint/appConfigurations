@@ -1,0 +1,69 @@
+"" vimrc.before
+
+" echomsg "Executing vimrc.before"
+
+"" Function to source only if file exists {
+silent function! SourceIfExists(file)
+    if filereadable(expand(a:file))
+        exe 'source' a:file
+    endif
+endfunction
+"" }
+
+runtime! custom_functions.vim
+"call SourceIfExists("$HOME/.vim/custom_functions.vim")
+
+" Presentation
+let g:galaxyline_enabled = 1
+let g:webdevicons_enabled = 1
+let g:gitsigns_enabled = 1
+
+" Coding
+let g:rainbow_enabled = 1
+let g:cpp_enhanced_highlight_enabled = 0
+let g:python_enabled = 0
+
+" Auto-completion
+let g:compe_enabled = 1
+let g:asyncomplete_enabled = 0
+
+" Async Language Server Protocol plugin for vim8 and neovim.
+let g:lsp_enabled = 1
+
+" explorer
+let g:nvim_tree_enabled = 1
+
+" Text/file search
+let g:telescope_enabled = 1
+let g:fzf_enabled = 1
+
+let g:whichkey_enabled = 1
+
+""" { Providers
+" Ruby
+let g:loaded_ruby_provider = 0 " disable
+let g:ruby_host_prog = ''
+
+" Perl
+let g:loaded_perl_provider = 0 " disable
+let g:perl_host_prog = ''
+
+" Nodejs
+" let g:loaded_node_provider = 1
+" let g:node_host_prog = '/usr/local/bin/neovim-node-host'
+
+" Python
+let g:loaded_python_provider = 0 " disable python2
+let g:python_host_prog = ''
+if has('python3')
+    let g:loaded3_python_provider = 1
+    " echomsg "python3 installed"
+    "let g:jedi#force_py_version = 3
+    let g:pymode_python = 'python3'
+    if WINDOWS()
+        let g:python3_host_prog = 'C:/Program Files/Python38/python'
+    else
+        let g:python3_host_prog = '/usr/bin/python3'
+    endif
+endif
+""" } Providers
