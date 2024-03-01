@@ -20,15 +20,11 @@ require('config')
 DATA_PATH = vim.fn.stdpath('data')
 CACHE_PATH = vim.fn.stdpath('cache')
 
+--[[
 if jit.os ~= 'Windows' then
     require('lsp')
 end
--- Key mappings
-require('config.keymappings')
-require('config.whichkey')
-
--- Autocommands
-require('config.autocommands')
+]]
 
 -- DAP
 -- require('dbg')

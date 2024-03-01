@@ -8,7 +8,7 @@ vim.g.nvim_tree_follow = 1 --"0 by default, this option allows the cursor to be 
 -- vim.g.nvim_tree_lsp_diagnostics = 1 --0 by default, will show lsp diagnostics in the tree. See :help nvim_tree_lsp_diagnostics
 vim.g.nvim_tree_auto_close = 0 -- O.auto_close_tree --0 by default, closes the tree when it's the last window
 vim.g.nvim_tree_auto_ignore_ft = 'startify' --"empty by default, don't auto open tree on specific filetypes.
-local tree_cb = require'nvim-tree.config'.nvim_tree_callback
+--local tree_cb = require'nvim-tree.config'.nvim_tree_callback
 vim.g.nvim_tree_bindings = {
     -- mappings
     ["<CR>"] = tree_cb("edit"),

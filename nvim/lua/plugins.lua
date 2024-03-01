@@ -34,8 +34,8 @@ return require('packer').startup(function(use)
     use {'joshdick/onedark.vim'}
 
     -- Development
-    use {'nvim-lua/popup.nvim'}
     use {'nvim-lua/plenary.nvim'}
+    use {'nvim-lua/popup.nvim'}
     use {'norcalli/nvim-colorizer.lua',
         config = function() require 'config.colorizer' end
     }
@@ -53,31 +53,36 @@ return require('packer').startup(function(use)
     -- use { 'nvim-telescope/telescope-snippets.nvim' }
 
     -- Telescope
-    use {'nvim-telescope/telescope.nvim',
-        requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}},
-        config = function() require 'config.telescope' end
+    use {
+        'nvim-telescope/telescope.nvim', tag = '0.1.5',
+        lazy = true,
+        requires = { {'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}, { "nvim-telescope/telescope-live-grep-args.nvim" }, },
+        config = function()
+            require("telescope").load_extension("live_grep_args")
+        end
+        --config = function() require 'config.telescope' end
     }
     use {'nvim-telescope/telescope-symbols.nvim'}
     use {'nvim-telescope/telescope-media-files.nvim'}
     use {'nvim-telescope/telescope-packer.nvim'}
-    use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+    use {'nvim-telescope/telescope-fzf-native.nvim', run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
+    use {"nvim-telescope/telescope-file-browser.nvim",
+        requires = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
+    }
 
     if jit.os ~= 'Windows' then
-        use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
-
         -- LSP config
-        use {'neovim/nvim-lspconfig',
-            config = function() require 'lsp' end
-        }
-        use {'kabouzeid/nvim-lspinstall'}
-        use {'glepnir/lspsaga.nvim'}
-        use {'hrsh7th/nvim-compe',
-            config = function() require 'config.compe' end
-        }
+        --use {'neovim/nvim-lspconfig', config = function() require 'lsp' end }
+        --use {'kabouzeid/nvim-lspinstall'}
+        --use {'glepnir/lspsaga.nvim'}
+        --use {'hrsh7th/nvim-compe', config = function() require 'config.compe' end }
 
         -- Teesitter
-        use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate',
-            config = function() require 'config.treesitter' end
+        use {'nvim-treesitter/nvim-treesitter',
+            run = function()
+                local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
+                ts_update()
+            end,
         }
         use {'windwp/nvim-ts-autotag'}
         use {'nvim-treesitter/playground'}
@@ -88,14 +93,18 @@ return require('packer').startup(function(use)
 
     -- Explorer
     use {'mhinz/vim-startify'}
-    use {'kyazdani42/nvim-tree.lua',
-        config = function() require 'config.nvimtree' end
+    use { 'nvim-tree/nvim-tree.lua',
+        lazy = true,
+        requires = {
+            'nvim-tree/nvim-web-devicons', -- optional
+        },
     }
 
     -- Status Line and Bufferline
     use {'glepnir/galaxyline.nvim',
         branch = 'main',
-        config = function() require 'config.statusline' end
+        config = function() require 'config.statusline' end,
+        requires = { 'nvim-tree/nvim-web-devicons', opt = true },
     }
     use {'romgrk/barbar.nvim',
         config = function() require 'config.barbar' end
@@ -104,9 +113,7 @@ return require('packer').startup(function(use)
         config = function() require 'config.lightbulb' end
     }
 
-    use {'AckslD/nvim-whichkey-setup.lua',
-        requires = {'liuchengxu/vim-which-key'},
-    }
+    use ("folke/which-key.nvim")
 
     -- Debugging
     --use {'puremourning/vimspector'}

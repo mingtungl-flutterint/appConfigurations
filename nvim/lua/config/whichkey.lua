@@ -1,5 +1,6 @@
 -- $Id lua/config/whichkey.lua
 --
+--vim.g.mapleader = " "
 local g = vim.g
 
 g.which_key_fallback_to_native_key = 1
@@ -16,18 +17,88 @@ g.which_key_sep = '→'
 g.which_key_timeout = 100
 
 
-require("whichkey_setup").config{
-    hide_statusline = true,
-    default_keymap_settings = {
-        silent=true,
-        noremap=true,
+local keymap = vim.keymap -- for conciseness
+local status_ok, which_key = pcall(require, "which-key")
+if not status_ok then
+    return
+end
+
+local setup = {
+    plugins = {
+        marks = true, -- shows a list of your marks on ' and `
+        registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
+        spelling = {
+            enabled = true, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
+            suggestions = 20, -- how many suggestions should be shown in the list?
+        },
+        -- the presets plugin, adds help for a bunch of default keybindings in Neovim
+        -- No actual key bindings are created
+        presets = {
+            operators = false, -- adds help for operators like d, y, ... and registers them for motion / text object completion
+            motions = true, -- adds help for motions
+            text_objects = true, -- help for text objects triggered after entering an operator
+            windows = true, -- default bindings on <c-w>
+            nav = true, -- misc bindings to work with windows
+            z = true, -- bindings for folds, spelling and others prefixed with z
+            g = true, -- bindings for prefixed with g
+        },
     },
-    default_mode = 'n',
+    -- add operators that will trigger motion and text object completion
+    -- to enable all native operators, set the preset / operators plugin above
+    -- operators = { gc = "Comments" },
+    key_labels = {
+        -- override the label used to display some keys. It doesn't effect WK in any other way.
+        -- For example:
+        ["<space>"] = "SPC",
+        ["<cr>"] = "RET",
+        ["<tab>"] = "TAB",
+    },
+    icons = {
+        breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
+        separator = "➜", -- symbol used between a key and it's label
+        group = "+", -- symbol prepended to a group
+    },
+    popup_mappings = {
+        scroll_down = "<c-d>", -- binding to scroll down inside the popup
+        scroll_up = "<c-u>", -- binding to scroll up inside the popup
+    },
+    window = {
+        border = "rounded", -- none, single, double, shadow
+        position = "bottom", -- bottom, top
+        margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]
+        padding = { 2, 2, 2, 2 }, -- extra window padding [top, right, bottom, left]
+        winblend = 0,
+    },
+    layout = {
+        height = { min = 4, max = 25 }, -- min and max height of the columns
+        width = { min = 20, max = 50 }, -- min and max width of the columns
+        spacing = 3, -- spacing between columns
+        align = "center", -- align columns left, center or right
+    },
+    ignore_missing = true, -- enable this to hide mappings for which you didn't specify a label
+    hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ " }, -- hide mapping boilerplate
+    show_help = true, -- show help message on the command line when the popup is visible
+    triggers = "auto", -- automatically setup triggers
+    -- triggers = {"<leader>"} -- or specify a list manually
+    triggers_blacklist = {
+        -- list of mode / prefixes that should never be hooked by WhichKey
+        -- this is mostly relevant for key maps that start with a native binding
+        -- most people should not need to change this
+        i = { "j", "k" },
+        v = { "j", "k" },
+    },
 }
 
-local wk = require('whichkey_setup')
+local opts = {
+    mode = "n", -- NORMAL mode
+    prefix = "<leader>",
+    buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+    silent = true, -- use `silent` when creating keymaps
+    noremap = true, -- use `noremap` when creating keymaps
+    nowait = true, -- use `nowait` when creating keymaps
+}
 
-local keymap = {
+local mappings = {
     ['<CR>'] = {'@q', 'macro q'}, -- setting a special key
     ['?'] = {
         name = '+Explorer',
@@ -37,8 +108,18 @@ local keymap = {
         r = {':NvimTreeRefresh<CR>', 'refresh'},
         t = {':NvimTreeToggle<CR>', 'toggle'},
     },
+    --["A"] = { "<cmd>Alpha<cr>", "Alpha" },
+    --["B"] = {
+    --    "<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<cr>",
+    --    "Buffers",
+    --},
+    ["c"] = { "<cmd>Bdelete!<CR>", "Close Buffer" },
+    ["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
+    ["q"] = { "<cmd>q!<CR>", "Quit" },
+    ["w"] = { "<cmd>w!<CR>", "Save" },
+
     b = {
-        name = '+buffer' ,
+        name = 'Buffer' ,
         --['>'] = {':BufferMoveNext', 'move next'},     -- barbar.vim
         --['<' ]= {':BufferMovePrevious', 'move prev'}, -- barbar.vim
         ['1'] = {'b1<cr>', 'buffer 1'},
@@ -50,7 +131,7 @@ local keymap = {
         ['?'] = {':buffers[!]<cr>', 'all buffers'}
     },
     F = {
-        name = '+fold',
+        name = 'Fold',
         O = {':set foldlevel=20'  , 'open all'},
         C = {':set foldlevel=0'   , 'close all'},
         c = {':foldclose'         , 'close'},
@@ -62,19 +143,41 @@ local keymap = {
         ['5'] = {':set foldlevel=5'   , 'level5'},
         ['6'] = {':set foldlevel=6<cr>'   , 'level6'}
     },
-    --[[
-    f = {
-        name = '+fzf',
-        ['/'] = {':FzfFiles<cr>', 'Files'},
-        ['?'] = {':FzfHistory:<cr>', 'History'},
-        a = {':FzfWindows<cr>', 'Windows'},
-        b = {':FzfBuffers<cr>', 'Buffers'},
-        l = {':FzfBLines<cr>', 'BLines'},
-        K = {':call SearchWordWithAg()<CR>','Ag'},
+    -- Packer
+    p = {
+        name = "Packer",
+        c = { "<cmd>PackerCompile<cr>", "Compile" },
+        i = { "<cmd>PackerInstall<cr>", "Install" },
+        s = { "<cmd>PackerSync<cr>", "Sync" },
+        S = { "<cmd>PackerStatus<cr>", "Status" },
+        u = { "<cmd>PackerUpdate<cr>", "Update" },
     },
-    --]]
-    f = { -- set a nested structure
-        name = '+telescope',
+    -- Git
+    g = {
+        name = "Git",
+        b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
+        c = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },
+        d = {
+            "<cmd>Gitsigns diffthis HEAD<cr>",
+            "Diff",
+        },
+        g = { "<cmd>lua _LAZYGIT_TOGGLE()<CR>", "Lazygit" },
+        j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
+        k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
+        l = { "<cmd>lua require 'gitsigns'.blame_line()<cr>", "Blame" },
+        o = { "<cmd>Telescope git_status<cr>", "Open changed file" },
+        p = { "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", "Preview Hunk" },
+        r = { "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
+        R = { "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
+        s = { "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
+        u = {
+            "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>",
+            "Undo Stage Hunk",
+        },
+    },
+    --Telescope
+    t = { -- set a nested structure
+        name = 'Telescope',
         ['?'] = {'<Cmd>Telescope help_tags<CR>', 'help tags'},
         b = {'<Cmd>Telescope buffers<CR>', 'buffers'},
         c = {
@@ -82,91 +185,36 @@ local keymap = {
             c = {'<Cmd>Telescope commands<CR>', 'commands'},
             h = {'<Cmd>Telescope command_history<CR>', 'history'},
         },
-        f = {'<Cmd>Telescope find_files<CR>', 'files'},
-        g = {
-            name = '+git',
-            g = {'<Cmd>Telescope git_commits<CR>', 'commits'},
-            c = {'<Cmd>Telescope git_bcommits<CR>', 'bcommits'},
-            b = {'<Cmd>Telescope git_branches<CR>', 'git branches'},
-            s = {'<Cmd>Telescope git_status<CR>', 'status'},
-        },
+        f = {'<Cmd>Telescope find_files<CR>', 'Find file'},
+        F = { "<cmd>Telescope live_grep theme=ivy<cr>", "Find Text" },
+        g = { "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", "Live grep" },
         h = {'<Cmd>Telescope command_history<CR>', 'history'},
         i = {'<Cmd>Telescope media_files<CR>', 'media files'},
-        l = {
-            name = '+lsp',
-            d = {'<Cmd>Telescope lsp_document_diagnostics<CR>', 'document_diagnostics'},
-            D = {'<Cmd>Telescope lsp_workspace_diagnostics<CR>', 'workspace_diagnostics'},
-        },
+        k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
         m = {'<Cmd>Telescope marks<CR>', 'marks'},
         M = {'<Cmd>Telescope man_pages<CR>', 'man_pages'},
         o = {'<Cmd>Telescope vim_options<CR>', 'vim_options'},
+        P = {"<cmd>lua require('telescope').extensions.projects.projects()<cr>", "Projects" },
         q = {'<Cmd>Telescope quickfix<CR>', 'quickfix'},
         r = {'<Cmd>Telescope registers<CR>', 'registers'},
-        t = {'<Cmd>Telescope live_grep<CR>', 'text'},
+        R = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
         --t = {'<Cmd>Telescope filetypes<CR>', 'filetypes'},
         u = {'<Cmd>Telescope colorscheme<CR>', 'colorschemes'},
-        w = {'<Cmd>Telescope file_browser<CR>', 'buf_fuz_find'},
+        w = {'<Cmd>Telescope file_browser<CR>', 'File browser'},
     },
-    --g = {':grep ', 'ripgrep'},
-    H = {':let @/=""<CR> <bar> :<C-u>nohls<CR><C-l>', 'nohl'},
-    h = {':set hls!<CR>', 'hlsearch' },
-    s = {":luafile $MYVIMRC<CR>", 'source RC'},
-    w = {':w!<CR>', 'save file'}, -- set a single command and text
+-- Terminal
+    T = {
+        name = "Terminal",
+        n = { "<cmd>lua _NODE_TOGGLE()<cr>", "Node" },
+        u = { "<cmd>lua _NCDU_TOGGLE()<cr>", "NCDU" },
+        t = { "<cmd>lua _HTOP_TOGGLE()<cr>", "Htop" },
+        p = { "<cmd>lua _PYTHON_TOGGLE()<cr>", "Python" },
+        f = { "<cmd>ToggleTerm direction=float<cr>", "Float" },
+        h = { "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Horizontal" },
+        v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical" },
+    },
 }
-wk.register_keymap('leader', keymap)
 
+which_key.setup(setup)
+which_key.register(mappings, opts)
 
--- Local leader and visual
-local visual_keymap = {
-    name = '+visual',
-    ['<'] = {'<gv', 'shift left'},
-    ['>'] = {'>gv', 'shift right'},
-    K = {':move \'<-2<CR>gv-gv', 'move line up'},
-    J = {':move \'>+1<CR>gv-gv', 'move line down'},
-}
-wk.register_keymap('leader', visual_keymap, {mode = 'v'})
-
-local prog_keymap = {
-    name = '+prog',
-    r = {':!python %', 'run python'},
-    --g = {':set greprp=rg\\ --vimgrep\\ --smart-case\\ --no-heading\\ --with-filename\\ --line-number\\ --column\\ --pretty', 'ripgrep'},
-}
-wk.register_keymap('localleader', prog_keymap)
-
--- Tab Navigations
--- [[
-local tab_navigation = {
-    name = '+tab',
-    j = {'<C-w>j', 'Move up'},
-    k = {'<C-w>k', 'Move down'},
-    h = {'<C-w>h', 'Move left'},
-    l = {'<C-w>l', 'Move right'},
-    u = {'<C-W>s', 'split below' },
-    v = {'<C-W>v', 'split right' },
-}
-wk.register_keymap('localleader', tab_navigation)
---]]
-
--- Split Navigations
-local split_navigation = {
-    name = '+split',
-    j = {'<C-w>j', 'Move up'},
-    k = {'<C-w>k', 'Move down'},
-    h = {'<C-w>h', 'Move left'},
-    l = {'<C-w>l', 'Move right'},
-    u = {'<C-W>s', 'split below' },
-    v = {'<C-W>v', 'split right' },
-}
-wk.register_keymap('localleader', split_navigation)
--- wk.register_keymap('localleader', split_navigation, {mode = 'i'})
-
--- Arbitrary key
-local keymap_goto = {
-    name = "+goto",
-    h = { "<cmd>lua require'lspsaga.provider'.lsp_finder()<CR>", "References" },
-    d = { "<cmd>lua require'lspsaga.provider'.preview_definition()<CR>", "Peek Definition" },
-    D = { "<Cmd>lua vim.lsp.buf.definition()<CR>", "Goto Definition" },
-    s = { "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>", "Signature Help" },
-    i = { "<cmd>lua vim.lsp.buf.implementation()<CR>", "Goto Implementation" }
-  }
-wk.register_keymap("g", keymap_goto, { noremap = true, silent = true, bufnr = bufnr })

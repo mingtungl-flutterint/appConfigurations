@@ -44,6 +44,19 @@ map('n', '<C-l>', '<C-w>l')
 --  Shift+Tab : go to the previous tab.
 map('n', '<M-Tab>', ':tabn<CR>')
 map('n', '<S-Tab>', ':tabp<CR>')
+map('n', '<Leader>tn', ':tabnew<CR>')
+map('n', '<Leader>tc', ':tabclose<CR>')
+
+-- Opens a new tab with the current buffer's path - Super useful when editing files in the same directory
+map('n', '<leader>te', ':tabedit <C-r>=escape(expand("%:p:h"), " ")<cr>/')
+
+-- Close the current buffer
+map('n', '<Leader>bd', ':bclose<CR>:tabclose<CR>')
+
+-- next buffer
+map('n', '<Leader>l', ':bnext<CR>')
+-- previous buffer
+map('n', '<Leader>h', ':bprevious<CR>')
 
 -- Use alt + hjkl to resize windows
 -- map('n', '<M-j>', '<cmd>resize -2<CR>')
@@ -93,6 +106,13 @@ map('', 'Q', '')
 -- highlight search
 -- map('n', '<Leader>h', ':set hlsearch!<CR>')
 -- map('n', '<Leader>h', ':let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>')
+
+-- fast save
+map('n', '<Leader>w', ':w!<CR>')
+
+-- Switch CWD to the directory of the open buffer
+map('n', '<leader>cd', ':cd <C-r>=escape(expand("%:p:h"), " ")<cr>')
+map('n', '<leader>lcd', ':lcd <C-r>=escape(expand("%:p:h"), " ")<cr>')
 -----------------------------------------------------------------------------
 -- }}}1
 -----------------------------------------------------------------------------

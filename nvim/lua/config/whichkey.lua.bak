@@ -1,0 +1,181 @@
+-- $Id lua/config/whichkey.lua
+-- This config file is for
+--[[
+--
+use {
+    'AckslD/nvim-whichkey-setup.lua',
+    requires = {'liuchengxu/vim-which-key'},
+}
+--]]
+
+local g = vim.g
+
+g.which_key_fallback_to_native_key = 1
+g.which_key_display_names = {
+    ['<CR>'] = '',    -- RETURN
+    ['<TAB>'] = '',
+    [' '] = '六',
+    ['<A-...>'] = 'גּ',  -- ALT
+    ['<M-...>'] = 'גּ',  -- META
+    ['<C-...>'] = 'דּ',  -- CTRL
+    ['<S-...>'] = '',  -- SHIFT
+}
+g.which_key_sep = '→'
+g.which_key_timeout = 100
+
+
+require("whichkey_setup").config{
+    hide_statusline = true,
+    default_keymap_settings = {
+        silent=true,
+        noremap=true,
+    },
+    default_mode = 'n',
+}
+
+
+local wk = require('whichkey_setup')
+
+local keymap = {
+    ['<CR>'] = {'@q', 'macro q'}, -- setting a special key
+    ['?'] = {
+        name = '+Explorer',
+        c = {':NvimTreeClose<CR>', 'close'},
+        f = {':NvimTreeFindFile<CR>', 'find file'},
+        o = {':NvimTreeOpen<CR>', 'open'},
+        r = {':NvimTreeRefresh<CR>', 'refresh'},
+        t = {':NvimTreeToggle<CR>', 'toggle'},
+    },
+    b = {
+        name = '+buffer' ,
+        --['>'] = {':BufferMoveNext', 'move next'},     -- barbar.vim
+        --['<' ]= {':BufferMovePrevious', 'move prev'}, -- barbar.vim
+        ['1'] = {'b1<cr>', 'buffer 1'},
+        ['2'] = {'b2<cr>', 'buffer 2'},
+        -- b = {':BufferPick', 'pick buffer'},  -- barbar.vim
+        d = {':bd', 'delete'},
+        n = {':bnext<cr>', 'next'},
+        p = {':bprevious<cr>', 'previous'},
+        ['?'] = {':buffers[!]<cr>', 'all buffers'}
+    },
+    F = {
+        name = '+fold',
+        O = {':set foldlevel=20'  , 'open all'},
+        C = {':set foldlevel=0'   , 'close all'},
+        c = {':foldclose'         , 'close'},
+        o = {':foldopen'          , 'open'},
+        ['1'] = {':set foldlevel=1'   , 'level1'},
+        ['2'] = {':set foldlevel=2'   , 'level2'},
+        ['3'] = {':set foldlevel=3'   , 'level3'},
+        ['4'] = {':set foldlevel=4'   , 'level4'},
+        ['5'] = {':set foldlevel=5'   , 'level5'},
+        ['6'] = {':set foldlevel=6<cr>'   , 'level6'}
+    },
+    --[[
+    f = {
+        name = '+fzf',
+        ['/'] = {':FzfFiles<cr>', 'Files'},
+        ['?'] = {':FzfHistory:<cr>', 'History'},
+        a = {':FzfWindows<cr>', 'Windows'},
+        b = {':FzfBuffers<cr>', 'Buffers'},
+        l = {':FzfBLines<cr>', 'BLines'},
+        K = {':call SearchWordWithAg()<CR>','Ag'},
+    },
+    --]]
+    f = { -- set a nested structure
+        name = '+telescope',
+        ['?'] = {'<Cmd>Telescope help_tags<CR>', 'help tags'},
+        b = {'<Cmd>Telescope buffers<CR>', 'buffers'},
+        c = {
+            name = '+commands',
+            c = {'<Cmd>Telescope commands<CR>', 'commands'},
+            h = {'<Cmd>Telescope command_history<CR>', 'history'},
+        },
+        f = {'<Cmd>Telescope find_files<CR>', 'files'},
+        g = {
+            name = '+git',
+            g = {'<Cmd>Telescope git_commits<CR>', 'commits'},
+            c = {'<Cmd>Telescope git_bcommits<CR>', 'bcommits'},
+            b = {'<Cmd>Telescope git_branches<CR>', 'git branches'},
+            s = {'<Cmd>Telescope git_status<CR>', 'status'},
+        },
+        h = {'<Cmd>Telescope command_history<CR>', 'history'},
+        i = {'<Cmd>Telescope media_files<CR>', 'media files'},
+        l = {
+            name = '+lsp',
+            d = {'<Cmd>Telescope lsp_document_diagnostics<CR>', 'document_diagnostics'},
+            D = {'<Cmd>Telescope lsp_workspace_diagnostics<CR>', 'workspace_diagnostics'},
+        },
+        m = {'<Cmd>Telescope marks<CR>', 'marks'},
+        M = {'<Cmd>Telescope man_pages<CR>', 'man_pages'},
+        o = {'<Cmd>Telescope vim_options<CR>', 'vim_options'},
+        q = {'<Cmd>Telescope quickfix<CR>', 'quickfix'},
+        r = {'<Cmd>Telescope registers<CR>', 'registers'},
+        t = {'<Cmd>Telescope live_grep<CR>', 'text'},
+        --t = {'<Cmd>Telescope filetypes<CR>', 'filetypes'},
+        u = {'<Cmd>Telescope colorscheme<CR>', 'colorschemes'},
+        w = {'<Cmd>Telescope file_browser<CR>', 'buf_fuz_find'},
+    },
+    --g = {':grep ', 'ripgrep'},
+    H = {':let @/=""<CR> <bar> :<C-u>nohls<CR><C-l>', 'nohl'},
+    h = {':set hls!<CR>', 'hlsearch' },
+    s = {":luafile $MYVIMRC<CR>", 'source RC'},
+    w = {':w!<CR>', 'save file'}, -- set a single command and text
+}
+wk.register_keymap('leader', keymap)
+
+
+-- Local leader and visual
+local visual_keymap = {
+    name = '+visual',
+    ['<'] = {'<gv', 'shift left'},
+    ['>'] = {'>gv', 'shift right'},
+    K = {':move \'<-2<CR>gv-gv', 'move line up'},
+    J = {':move \'>+1<CR>gv-gv', 'move line down'},
+}
+wk.register_keymap('leader', visual_keymap, {mode = 'v'})
+
+local prog_keymap = {
+    name = '+prog',
+    r = {':!python %', 'run python'},
+    --g = {':set greprp=rg\\ --vimgrep\\ --smart-case\\ --no-heading\\ --with-filename\\ --line-number\\ --column\\ --pretty', 'ripgrep'},
+}
+wk.register_keymap('localleader', prog_keymap)
+
+-- Tab Navigations
+-- [[
+local tab_navigation = {
+    name = '+tab',
+    j = {'<C-w>j', 'Move up'},
+    k = {'<C-w>k', 'Move down'},
+    h = {'<C-w>h', 'Move left'},
+    l = {'<C-w>l', 'Move right'},
+    u = {'<C-W>s', 'split below' },
+    v = {'<C-W>v', 'split right' },
+}
+wk.register_keymap('localleader', tab_navigation)
+--]]
+
+-- Split Navigations
+local split_navigation = {
+    name = '+split',
+    j = {'<C-w>j', 'Move up'},
+    k = {'<C-w>k', 'Move down'},
+    h = {'<C-w>h', 'Move left'},
+    l = {'<C-w>l', 'Move right'},
+    u = {'<C-W>s', 'split below' },
+    v = {'<C-W>v', 'split right' },
+}
+wk.register_keymap('localleader', split_navigation)
+-- wk.register_keymap('localleader', split_navigation, {mode = 'i'})
+
+-- Arbitrary key
+local keymap_goto = {
+    name = "+goto",
+    h = { "<cmd>lua require'lspsaga.provider'.lsp_finder()<CR>", "References" },
+    d = { "<cmd>lua require'lspsaga.provider'.preview_definition()<CR>", "Peek Definition" },
+    D = { "<Cmd>lua vim.lsp.buf.definition()<CR>", "Goto Definition" },
+    s = { "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>", "Signature Help" },
+    i = { "<cmd>lua vim.lsp.buf.implementation()<CR>", "Goto Implementation" }
+  }
+wk.register_keymap("g", keymap_goto, { noremap = true, silent = true, bufnr = bufnr })
