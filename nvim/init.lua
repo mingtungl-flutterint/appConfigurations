@@ -1,5 +1,6 @@
 -- $Id init.lua
 -- Main init file
+-- ~/.config/nvim
 
 -- local gvars = require('globalvariables')
 require('before')
