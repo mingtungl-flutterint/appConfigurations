@@ -104,11 +104,11 @@ local mappings = {
     ['<F4>'] = {'<cmd>luafile $MYVIMRC<CR> | <cmd>echo "sourced " . $MYVIMRC<cr>', 'Source VIMRC'},
     ['?'] = {
         name = 'Explorer',
-        c = {'<cmd>NvimTreeClose<CR>', 'close'},
-        f = {'<cmd>NvimTreeFindFile<CR>', 'find file'},
-        o = {'<cmd>NvimTreeOpen<CR>', 'open'},
-        r = {'<cmd>NvimTreeRefresh<CR>', 'refresh'},
-        t = {'<cmd>NvimTreeToggle<CR>', 'toggle'},
+        c = {'<cmd>NvimTreeClose<CR>', 'Close'},
+        e = {'<cmd>NvimTreeToggle<CR>', 'Explorer'},
+        f = {'<cmd>NvimTreeFindFile<CR>', 'Find file'},
+        --o = {'<cmd>NvimTreeOpen<CR>', 'Open'},
+        r = {'<cmd>NvimTreeRefresh<CR>', 'Refresh'},
     },
     --["A"] = { "<cmd>Alpha<cr>", "Alpha" },
     --["B"] = {
@@ -120,6 +120,7 @@ local mappings = {
         vim.api.nvim_command('lcd %:p:h')
         vim.api.nvim_command('tabnew')
         end, 'New Tab'},
+    ['l'] = { '<cmd>lcd %:p:h<cr>', "Change directory" },
     ['s'] = {
         name = 'Text Search',
         ["c"] = { '<cmd>nohlsearch<CR> | <cmd>echo "Previous search cleared"<CR>', 'Clear search' },

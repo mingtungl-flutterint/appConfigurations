@@ -18,19 +18,4 @@ require('config.autocommands')
 require('config.colorscheme')
 require('config.startify')
 require('config.kommentary')
--- empty setup using defaults
---require('nvim-tree').setup()
-require("nvim-tree").setup({
-  sort = {
-    sorter = "case_sensitive",
-  },
-  view = {
-    width = 30,
-  },
-  renderer = {
-    group_empty = true,
-  },
-  filters = {
-    dotfiles = true,
-  },
-})
+require('config.nvimtree')
