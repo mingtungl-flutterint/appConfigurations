@@ -100,88 +100,83 @@ local opts = {
 
 local mappings = {
     ['<CR>'] = {'@q', 'macro q'}, -- setting a special key
-    ['<F3>'] = {'<cmd>e $MYVIMRC<CR>', 'Open VIMRC'},
-    ['<F4>'] = {'<cmd>luafile $MYVIMRC<CR> | <cmd>echo "sourced " . $MYVIMRC<cr>', 'Source VIMRC'},
     ['?'] = {
-        name = 'Explorer',
-        c = {'<cmd>NvimTreeClose<CR>', 'Close'},
-        e = {'<cmd>NvimTreeToggle<CR>', 'Explorer'},
-        f = {'<cmd>NvimTreeFindFile<CR>', 'Find file'},
-        --o = {'<cmd>NvimTreeOpen<CR>', 'Open'},
-        r = {'<cmd>NvimTreeRefresh<CR>', 'Refresh'},
+        name = '+Explorer',
+        c = {':NvimTreeClose<CR>', 'close'},
+        f = {':NvimTreeFindFile<CR>', 'find file'},
+        o = {':NvimTreeOpen<CR>', 'open'},
+        r = {':NvimTreeRefresh<CR>', 'refresh'},
+        t = {':NvimTreeToggle<CR>', 'toggle'},
     },
     --["A"] = { "<cmd>Alpha<cr>", "Alpha" },
     --["B"] = {
     --    "<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<cr>",
     --    "Buffers",
     --},
-    ["c"] = { "<cmd>bdelete!<CR>", "Close Buffer" },
-    ["n"] = { function()
-        vim.api.nvim_command('lcd %:p:h')
-        vim.api.nvim_command('tabnew')
-        end, 'New Tab'},
-    ['l'] = { '<cmd>lcd %:p:h<cr>', "Change directory" },
-    ['s'] = {
-        name = 'Text Search',
-        ["c"] = { '<cmd>nohlsearch<CR> | <cmd>echo "Previous search cleared"<CR>', 'Clear search' },
-        ["h"] = { '<cmd>nohl<CR>', 'NoHL' },
-    },
+    ["c"] = { "<cmd>Bdelete!<CR>", "Close Buffer" },
+    ["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
     ["q"] = { "<cmd>q!<CR>", "Quit" },
     ["w"] = { "<cmd>w!<CR>", "Save" },
 
-    B = {
+    b = {
         name = 'Buffer' ,
         --['>'] = {':BufferMoveNext', 'move next'},     -- barbar.vim
         --['<' ]= {':BufferMovePrevious', 'move prev'}, -- barbar.vim
         ['1'] = {'b1<cr>', 'buffer 1'},
         ['2'] = {'b2<cr>', 'buffer 2'},
         -- b = {':BufferPick', 'pick buffer'},  -- barbar.vim
-        d = {'<cmd>bd<cr>', 'Close buffer'},
-        n = {'<cmd>bnext<cr>', 'next'},
-        p = {'<cmd>bprevious<cr>', 'previous'},
-        ['?'] = {'<cmd>buffers[!]<cr>', 'all buffers'}
+        d = {':bd', 'delete'},
+        n = {':bnext<cr>', 'next'},
+        p = {':bprevious<cr>', 'previous'},
+        ['?'] = {':buffers[!]<cr>', 'all buffers'}
     },
     F = {
         name = 'Fold',
-        O = {'<cmd>set foldlevel=20'  , 'open all'},
-        C = {'<cmd>set foldlevel=0'   , 'close all'},
-        c = {'<cmd>foldclose'         , 'close'},
-        o = {'<cmd>foldopen'          , 'open'},
-        ['1'] = {'<cmd>set foldlevel=1'   , 'level1'},
-        ['2'] = {'<cmd>set foldlevel=2'   , 'level2'},
-        ['3'] = {'<cmd>set foldlevel=3'   , 'level3'},
-        ['4'] = {'<cmd>set foldlevel=4'   , 'level4'},
-        ['5'] = {'<cmd>set foldlevel=5'   , 'level5'},
-        ['6'] = {'<cmd>set foldlevel=6<cr>'   , 'level6'}
+        O = {':set foldlevel=20'  , 'open all'},
+        C = {':set foldlevel=0'   , 'close all'},
+        c = {':foldclose'         , 'close'},
+        o = {':foldopen'          , 'open'},
+        ['1'] = {':set foldlevel=1'   , 'level1'},
+        ['2'] = {':set foldlevel=2'   , 'level2'},
+        ['3'] = {':set foldlevel=3'   , 'level3'},
+        ['4'] = {':set foldlevel=4'   , 'level4'},
+        ['5'] = {':set foldlevel=5'   , 'level5'},
+        ['6'] = {':set foldlevel=6<cr>'   , 'level6'}
     },
     -- Packer
-    P = {
-        name = 'Packer',
-        c = { '<cmd>PackerCompile<cr>', 'Compile' },
-        i = { '<cmd>PackerInstall<cr>', 'Install' },
-        s = { '<cmd>PackerSync<cr>', 'Sync' },
-        S = { '<cmd>PackerStatus<cr>', 'Status' },
-        u = { '<cmd>PackerUpdate<cr>', 'Update' },
+    p = {
+        name = "Packer",
+        c = { "<cmd>PackerCompile<cr>", "Compile" },
+        i = { "<cmd>PackerInstall<cr>", "Install" },
+        s = { "<cmd>PackerSync<cr>", "Sync" },
+        S = { "<cmd>PackerStatus<cr>", "Status" },
+        u = { "<cmd>PackerUpdate<cr>", "Update" },
     },
     -- Git
-    G = {
-        name = 'Git',
-        b = { '<cmd>Telescope git_branches<cr>', 'Checkout branch' },
-        c = { '<cmd>Telescope git_commits<cr>', 'Checkout commit' },
-        d = { '<cmd>Gitsigns diffthis HEAD<cr>', 'Diff' },
-        g = { '<cmd>lua _LAZYGIT_TOGGLE()<CR>', 'Lazygit' },
-        j = { '<cmd>lua require "gitsigns".next_hunk()<cr>', 'Next Hunk' },
-        k = { '<cmd>lua require "gitsigns".prev_hunk()<cr>', 'Prev Hunk' },
-        l = { '<cmd>lua require "gitsigns".blame_line()<cr>', 'Blame' },
-        o = { '<cmd>Telescope git_status<cr>', 'Open changed file' },
-        p = { '<cmd>lua require "gitsigns".preview_hunk()<cr>', 'Preview Hunk' },
-        r = { '<cmd>lua require "gitsigns".reset_hunk()<cr>', 'Reset Hunk' },
-        R = { '<cmd>lua require "gitsigns".reset_buffer()<cr>', 'Reset Buffer' },
-        s = { '<cmd>lua require "gitsigns".stage_hunk()<cr>', 'Stage Hunk' },
-        u = { '<cmd>lua require "gitsigns".undo_stage_hunk()<cr>', 'Undo Stage Hunk' },
+    g = {
+        name = "Git",
+        b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
+        c = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },
+        d = {
+            "<cmd>Gitsigns diffthis HEAD<cr>",
+            "Diff",
+        },
+        g = { "<cmd>lua _LAZYGIT_TOGGLE()<CR>", "Lazygit" },
+        j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
+        k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
+        l = { "<cmd>lua require 'gitsigns'.blame_line()<cr>", "Blame" },
+        o = { "<cmd>Telescope git_status<cr>", "Open changed file" },
+        p = { "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", "Preview Hunk" },
+        r = { "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
+        R = { "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
+        s = { "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
+        u = {
+            "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>",
+            "Undo Stage Hunk",
+        },
     },
     --Telescope
-    T = { -- set a nested structure
+    t = { -- set a nested structure
         name = 'Telescope',
         ['?'] = {'<Cmd>Telescope help_tags<CR>', 'help tags'},
         b = {'<Cmd>Telescope buffers<CR>', 'buffers'},
@@ -191,33 +186,33 @@ local mappings = {
             h = {'<Cmd>Telescope command_history<CR>', 'history'},
         },
         f = {'<Cmd>Telescope find_files<CR>', 'Find file'},
-        F = { '<cmd>Telescope live_grep theme=ivy<cr>', 'Find Text' },
-        g = { '<cmd>lua require("telescope").extensions.live_grep_args.live_grep_args()<cr>', 'Live grep' },
+        F = { "<cmd>Telescope live_grep theme=ivy<cr>", "Find Text" },
+        g = { "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", "Live grep" },
         h = {'<Cmd>Telescope command_history<CR>', 'history'},
         i = {'<Cmd>Telescope media_files<CR>', 'media files'},
-        k = { '<cmd>Telescope keymaps<cr>', 'Keymaps' },
+        k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
         m = {'<Cmd>Telescope marks<CR>', 'marks'},
         M = {'<Cmd>Telescope man_pages<CR>', 'man_pages'},
         o = {'<Cmd>Telescope vim_options<CR>', 'vim_options'},
-        P = {'<cmd>lua require("telescope").extensions.projects.projects()<cr>', 'Projects' },
+        P = {"<cmd>lua require('telescope').extensions.projects.projects()<cr>", "Projects" },
         q = {'<Cmd>Telescope quickfix<CR>', 'quickfix'},
         r = {'<Cmd>Telescope registers<CR>', 'registers'},
-        R = { '<cmd>Telescope oldfiles<cr>', 'Open Recent File' },
+        R = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
         --t = {'<Cmd>Telescope filetypes<CR>', 'filetypes'},
         u = {'<Cmd>Telescope colorscheme<CR>', 'colorschemes'},
         w = {'<Cmd>Telescope file_browser<CR>', 'File browser'},
     },
 -- Terminal
---    T = {
---        name = "Terminal",
---        n = { "<cmd>lua _NODE_TOGGLE()<cr>", "Node" },
---        u = { "<cmd>lua _NCDU_TOGGLE()<cr>", "NCDU" },
---        t = { "<cmd>lua _HTOP_TOGGLE()<cr>", "Htop" },
---        p = { "<cmd>lua _PYTHON_TOGGLE()<cr>", "Python" },
---        f = { "<cmd>ToggleTerm direction=float<cr>", "Float" },
---        h = { "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Horizontal" },
---        v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical" },
---    },
+    T = {
+        name = "Terminal",
+        n = { "<cmd>lua _NODE_TOGGLE()<cr>", "Node" },
+        u = { "<cmd>lua _NCDU_TOGGLE()<cr>", "NCDU" },
+        t = { "<cmd>lua _HTOP_TOGGLE()<cr>", "Htop" },
+        p = { "<cmd>lua _PYTHON_TOGGLE()<cr>", "Python" },
+        f = { "<cmd>ToggleTerm direction=float<cr>", "Float" },
+        h = { "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Horizontal" },
+        v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical" },
+    },
 }
 
 which_key.setup(setup)

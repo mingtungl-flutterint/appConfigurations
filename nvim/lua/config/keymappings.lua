@@ -11,9 +11,8 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ','
 map('n', '<Space>', '<Nop>')
 map('n', ',', '<Nop>')
-
 -- <space><space> switches between buffers
-map('n', '<leader><leader>', ':b#<CR>')
+-- map('n', '<leader><leader>', ':b#<CR>')
 
 -- movements that work on long wrapped lines
 map('', 'j', "(v:count ? 'j' : 'gj')", {expr = true})
@@ -49,16 +48,15 @@ map('n', '<Leader>tn', ':tabnew<CR>')
 map('n', '<Leader>tc', ':tabclose<CR>')
 
 -- Opens a new tab with the current buffer's path - Super useful when editing files in the same directory
---map('n', '<leader>te', ':tabedit <C-r>=escape(expand("%:p:h"), " ")<cr>/')
---map('n', '<leader>te', ':tabedit <C-r>=escape(expand("%:p:h"), " ")<cr>/')
+map('n', '<leader>te', ':tabedit <C-r>=escape(expand("%:p:h"), " ")<cr>/')
 
--- Buffer {{
---[[ see which-key
+-- Close the current buffer
 map('n', '<Leader>bd', ':bclose<CR>:tabclose<CR>')
+
+-- next buffer
 map('n', '<Leader>l', ':bnext<CR>')
+-- previous buffer
 map('n', '<Leader>h', ':bprevious<CR>')
---]]
--- }}
 
 -- Use alt + hjkl to resize windows
 -- map('n', '<M-j>', '<cmd>resize -2<CR>')
@@ -110,13 +108,11 @@ map('', 'Q', '')
 -- map('n', '<Leader>h', ':let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>')
 
 -- fast save
---map('n', '<Leader>w', ':w!<CR>')
+map('n', '<Leader>w', ':w!<CR>')
 
 -- Switch CWD to the directory of the open buffer
---[[ see which-key
 map('n', '<leader>cd', ':cd <C-r>=escape(expand("%:p:h"), " ")<cr>')
 map('n', '<leader>lcd', ':lcd <C-r>=escape(expand("%:p:h"), " ")<cr>')
---]]
 -----------------------------------------------------------------------------
 -- }}}1
 -----------------------------------------------------------------------------

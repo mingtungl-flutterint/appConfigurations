@@ -28,7 +28,7 @@ vim.api.nvim_exec([[
     ]], false)
 
 -- Highlight on yank
-cmd 'au TextYankPost * lua vim.highlight.on_yank {on_visual = false}'
+vim.cmd 'au TextYankPost * lua vim.highlight.on_yank {on_visual = false}'
 
 -----------------------------------------------------------------------------
 -- Terminal {{{1
@@ -39,8 +39,7 @@ function _G.__split_term_right()
     execute('setlocal norelativenumber')
     execute('startinsert')
 end
-
-cmd("command TermRight :call luaeval('_G.__split_term_right()')")
+vim.cmd("command TermRight :call luaeval('_G.__split_term_right()')")
 -- Directly go into insert mode when switching to terminal
 cmd [[autocmd BufWinEnter,WinEnter term://* startinsert]]
 -- cmd [[autocmd BufLeave term://* stopinsert]]
@@ -97,10 +96,5 @@ vim.api.nvim_exec([[
 cmd [[ autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR> ]]
 
 -----------------------------------------------------------------------------
--- File indent
+-- }}}1
 -----------------------------------------------------------------------------
-cmd 'autocmd FileType yaml setlocal ts=2 sts=2 sw=2 autoindent expandtab'
-cmd 'au BufRead,BufNewFile *.py set expandtab'
-cmd 'au BufRead,BufNewFile *.c set noexpandtab'
-cmd 'au BufRead,BufNewFile *.h set noexpandtab'
-cmd 'au BufRead,BufNewFile Makefile* setlocal ts=8 sts=8 sw=8 set noexpandtab'
