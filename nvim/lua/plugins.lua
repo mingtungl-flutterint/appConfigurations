@@ -32,6 +32,7 @@ return require('packer').startup(function(use)
     ]]
     use {'sainnhe/gruvbox-material'}
     use {'joshdick/onedark.vim'}
+    use { "catppuccin/nvim", as = "catppuccin" }
 
     -- Development
     use {'nvim-lua/plenary.nvim'}

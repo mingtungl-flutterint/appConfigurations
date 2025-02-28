@@ -4,10 +4,11 @@
 " Neovim-qt Guifont command
 " vimr doesn't support :Guifont
 
-:GuiFont! FiraCode\ Nerd\ Font:h11
+":GuiFont! FiraCode NF:h11
+":GuiFont! Cascadia Code PL:h11
 if !has("gui_vimr") && has('nvim')
-   ":GuiFont! Cascadia\ Code\ PL:h12:cANSI
-   :GuiFont! FiraCode\ Nerd\ Font:h11:cANSI
+   :GuiFont! Cascadia Code NF:h11:cANSI
+   ":GuiFont! FiraCode NF:h11:cANSI
    :GuiTabline 0
    :GuiPopupmenu 0
    :GuiLinespace 1

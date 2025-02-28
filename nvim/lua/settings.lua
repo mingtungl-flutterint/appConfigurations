@@ -5,12 +5,13 @@ local fn = vim.fn
 local api = vim.api
 
 local o  = vim.o  -- for setting global options
-local bo = vim.bo -- for setting buffer-scoped options
-local wo = vim.wo -- for setting window-scoped options
+--local bo = vim.bo -- for setting buffer-scoped options
+--local wo = vim.wo -- for setting window-scoped options
 local g  = vim.g  -- for setting global variables
 
 local executable = function(e) return fn.executable(e) > 0 end
 local opts_info = api.nvim_get_all_options_info()
+--[[
 local opt = setmetatable({}, {
     __newindex = function(_, key, value)
         o[key] = value
@@ -22,6 +23,7 @@ local opt = setmetatable({}, {
         end
     end
 })
+]]
 local function add(value, str, sep)
     sep = sep or ","
     str = str or ""
@@ -59,7 +61,7 @@ o.cscopequickfix = "s-,c-,d-,i-,t-,e-"
 -- o.showbreak       = string.rep('>', 3) -- Make it so that long lines wrap smartly
 o.path = ".,,,**"
 o.formatlistpat = [[^\\s*\\[({]\\?\\([0-9]\\+\\\|[a-zA-Z]\\+\\)[\\]:.)}]\\s\\+\\\|^\\s*[-–+o*•]\\s\\+]]
-bo.formatoptions = "qcrn1"
+o.formatoptions = "qcrn1"
 -- o.formatoptions-=a    -- Auto formatting is BAD.
 -- o.formatoptions-=t    -- Dont auto format my code. I got linters for that.
 -- o.formatoptions+=c    -- In general, I like it when comments respect textwidth
@@ -73,11 +75,11 @@ bo.formatoptions = "qcrn1"
 -----------------------------------------------------------------------------
 -- Indentation {{{1
 -----------------------------------------------------------------------------
-opt.expandtab = true -- Use spaces instead of tabs
-opt.shiftwidth = 4 -- Size of an indent
-opt.smartindent = true -- Insert indents automatically
-opt.tabstop = 4 -- Number of spaces tabs count for
-opt.softtabstop = 4
+o.expandtab = true -- Use spaces instead of tabs
+o.shiftwidth = 4 -- Size of an indent
+o.smartindent = true -- Insert indents automatically
+o.tabstop = 4 -- Number of spaces tabs count for
+o.softtabstop = 4
 o.shiftround = true -- Round indent
 o.joinspaces = false -- No double spaces with join after a dot
 o.cindent = true
@@ -86,15 +88,15 @@ o.autoindent = true  -- Indent at the same level of the previous line
 -----------------------------------------------------------------------------
 -- Display {{{1
 -----------------------------------------------------------------------------
-wo.number = true -- Print line number
-wo.relativenumber = true -- Relative line numbers
-wo.numberwidth = 6
-wo.signcolumn = 'auto'
-wo.cursorline = true
-opt.wrap = false
-opt.linebreak = true -- wrap, but on words, not randomly
-opt.textwidth = 200
-opt.synmaxcol = 1024 -- dont syntax highlight long lines
+o.number = true -- Print line number
+o.relativenumber = true -- Relative line numbers
+o.numberwidth = 6
+o.signcolumn = 'auto'
+o.cursorline = true
+o.wrap = false
+o.linebreak = true -- wrap, but on words, not randomly
+o.textwidth = 200
+o.synmaxcol = 1024 -- dont syntax highlight long lines
 g.vimsyn_embed = "lPr" -- allow embedded syntax highlighting for lua, python, ruby
 -- o.showmode = true
 o.showmode = false -- We dont need to see things like -- INSERT -- anymore
@@ -125,7 +127,7 @@ o.foldtext = "folds#render()"
 o.foldenable = false  -- No Auto fold code
 o.foldopen = add(o.foldopen, "search")
 o.foldlevelstart = 10
-opt.foldmethod = "indent"
+o.foldmethod = "indent"
 o.foldnestmax = 10
 o.fdc = "1"    -- foldcolumn
 o.fdl = 1      -- foldlevel = 99
@@ -136,7 +138,7 @@ o.fdl = 1      -- foldlevel = 99
 o.swapfile = false
 o.backup = false
 o.writebackup = false
-opt.undofile = true -- Save undo history
+o.undofile = true -- Save undo history
 o.undolevels = 1000
 o.confirm = true -- prompt to save before destructive actions
 
