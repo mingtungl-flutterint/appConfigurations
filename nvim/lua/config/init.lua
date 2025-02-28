@@ -1,4 +1,5 @@
 -- $Id lua/config/init.lua
+-- vim:set ts=2 sw=2 sts=2 et:
 --
 
 -- disable netrw at the very start of your init.lua

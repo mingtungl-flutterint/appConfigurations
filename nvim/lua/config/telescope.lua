@@ -1,4 +1,5 @@
--- telescope.lua
+-- $Id lua/config/telescope.lua
+-- vim:set ts=2 sw=2 sts=2 et:
 --
 local status_ok, telescope = pcall(require, "telescope")
 if not status_ok then

@@ -1,3 +1,6 @@
+-- $Id lua/config/gitsigns.lua
+-- vim:set ts=2 sw=2 sts=2 et:
+
 require('gitsigns').setup {
   signs = {
     add          = { text = '│' },

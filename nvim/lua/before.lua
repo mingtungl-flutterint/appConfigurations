@@ -1,4 +1,5 @@
 -- $Id lua/before.lua
+-- vim:set ts=2 sw=2 sts=2 et:
 --
 -- local gvars = require ('globalvariables')
 -- This is a module

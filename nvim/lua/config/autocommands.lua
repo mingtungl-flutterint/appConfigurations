@@ -1,4 +1,6 @@
--- $Id lua/autocommands.lua
+-- $Id lua/config/autocmds.lua
+-- vim:set ts=2 sw=2 sts=2 et:
+
 -- Custom autocmds and autogroups
 --
 local cmd = vim.cmd -- to execute Vim commands e.g. cmd('pwd')

@@ -1,3 +1,6 @@
+-- $Id lua/config/devicons.lus
+-- vim:set ts=2 sw=2 sts=2 et:
+
 require'nvim-web-devicons'.setup {
   -- globally enable default icons (default to false)
   -- will get overriden by `get_icons` option

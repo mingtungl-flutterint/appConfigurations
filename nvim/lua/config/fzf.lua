@@ -1,5 +1,5 @@
---  fzf.lua
-
+--  $Id lua/config/fzf.lua
+-- vim:set ts=2 sw=2 sts=2 et:
 --  fzf {
 --  Starting fzf in a popup window
 --  Required:

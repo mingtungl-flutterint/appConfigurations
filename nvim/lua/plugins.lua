@@ -1,4 +1,5 @@
 -- $Id lua/plugins.lua
+-- vim:set ts=2 sw=2 sts=2 et:
 --
 local fn = vim.fn
 local execute = vim.api.nvim_command

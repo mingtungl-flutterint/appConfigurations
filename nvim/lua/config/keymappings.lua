@@ -1,4 +1,5 @@
--- $Id lua/keymappings.lua
+-- $Id lua/config/keymaps.lua
+-- vim:set ts=2 sw=2 sts=2 et:
 -- Custom key bindings
 --
 local map = require('utils').map
