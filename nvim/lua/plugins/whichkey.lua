@@ -47,10 +47,7 @@ wk.add({
   { "<leader>Tt", "<cmd>lua _HTOP_TOGGLE()<cr>", desc = "Htop", nowait = true, remap = false },
   { "<leader>Tu", "<cmd>lua _NCDU_TOGGLE()<cr>", desc = "NCDU", nowait = true, remap = false },
   { "<leader>Tv", "<cmd>ToggleTerm size=80 direction=vertical<cr>", desc = "Vertical", nowait = true, remap = false },
-  { "<leader>B", group = "buffers", expand = function()
-      return require("which-key.extras").expand.buf()
-    end
-  },
+--  { "<leader>B", group = "buffers", expand = function() return require("which-key.extras").expand.buf() end },
   { "<leader>b", group = "Buffer", nowait = true, remap = false },
   { "<leader>b1", "b1<cr>", desc = "buffer 1", nowait = true, remap = false },
   { "<leader>b2", "b2<cr>", desc = "buffer 2", nowait = true, remap = false },

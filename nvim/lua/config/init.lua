@@ -1,5 +1,5 @@
 -- $Id lua/config/init.lua
--- vim:set ts=2 sw=2 sts=2 et:
+-- vim:set ts=2 sw=2 sts=2:
 --
 
 -- disable netrw at the very start of your init.lua
@@ -9,29 +9,10 @@ vim.g.loaded_netrwPlugin = 1
 -- set termguicolors to enable highlight groups
 vim.opt.termguicolors = true
 
--- Key mappings
-require('config.keymappings')
-require('config.whichkey')
-
--- Autocommands
-require('config.autocommands')
-
-require('config.colorscheme')
-require('config.startify')
-require('config.kommentary')
--- empty setup using defaults
---require('nvim-tree').setup()
-require("nvim-tree").setup({
-  sort = {
-    sorter = "case_sensitive",
-  },
-  view = {
-    width = 30,
-  },
-  renderer = {
-    group_empty = true,
-  },
-  filters = {
-    dotfiles = true,
-  },
-})
+require('config.keymaps')
+require('config.autocmds')
+require('config.options')
+--require('config.startify')
+--require('config.kommentary')
+--require('config.nvimtree')
+--require('config.whichkey')
