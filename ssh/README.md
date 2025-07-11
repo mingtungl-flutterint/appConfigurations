@@ -8,6 +8,6 @@
 ecdsa521-pyr.ppk
 ed25519-pyr.ppk
 ```
-# These two keys were generated from ./ssh/id_ecdsa and ./ssh/id_ed25519 private keys.
-## Key pass phrase: ```T1gEr```
+## These two keys were generated from ./ssh/id_ecdsa and ./ssh/id_ed25519 private keys.
+Key pass phrase: ```T1gEr```
 
