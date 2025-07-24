@@ -1,0 +1,14 @@
+Usage:
+1. Create a new module (module_name.py) in this directory - use arjel.py as reference
+2. Add required processing classes - they shall inherit the base classes in log_processing_base.py
+3. Define and implement
+    def collectStats(log_level:int, params:dict)
+3. Import collectStats to main.py
+    e.g.  from module_name.py import collectStats
+4. Execute from command line: python main.py arguments
+e.g.
+    $ python main.py --log_level DEBUG --env_name 'IOM' --ip-address '10.91.23.71' --log_basename 'Default.arjelTransport' --date_first 20221116 --date_last 20221201
+
+
+Note: please do not alter other modules unnecessarily
+

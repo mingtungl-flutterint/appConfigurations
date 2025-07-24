@@ -1,0 +1,734 @@
+#!/usr/bin/env bash
+# $id git_aliases.sh
+
+# ===========================
+# ===== Global variables ====
+# ===========================
+my_git_cmd=''
+
+#
+# Functions
+#
+
+# The name of the current branch
+# Back-compatibility wrapper for when this function was defined here in
+# the plugin, before being pulled in to core lib/git.zsh as git_current_branch()
+# to fix the core -> git plugin dependency.
+function git_current_branch() {
+#current_branch() {
+  #git_current_branch
+  #current_git_branch=$(git -C "$1" branch | sed  '/^\*/!d;s/\* //')
+  git -C "$1" branch | sed  '/^\*/!d;s/\* //'
+}
+# The list of remotes
+function current_repository() {
+  if ! $_omb_git_git_cmd rev-parse --is-inside-work-tree &> /dev/null; then
+    return
+  fi
+  echo $($_omb_git_git_cmd remote -v | cut -d':' -f 2)
+}
+# Pretty log messages
+function _git_log_prettily(){
+  if ! [ -z $1 ]; then
+    git log --pretty=$1
+  fi
+}
+# Warn if the current branch is a WIP
+function work_in_progress() {
+  if $(git log -n 1 2>/dev/null | grep -q -c "\-\-wip\-\-"); then
+    echo "WIP!!"
+  fi
+}
+
+# ===========================
+# ===== Helper Functions ====
+# ===========================
+function printUsage() {
+    printf "${*}\n"
+    return 55
+}
+
+function append_str2 {
+    local eval arg1="$1"
+    local eval arg2="$2"
+    echo -n "${arg1} ${arg2}"
+}
+function append_str {
+    local eval temp="$1"
+    shift
+    while [ "$1" != "" ]; do
+        local eval s="$1"
+        temp=$(append_str2 "${temp}" "${s}")
+        shift
+    done
+    echo -n "${temp}"
+}
+
+# ===========================
+# =====     Aliases ====
+# ===========================
+alias g='git'
+
+# ===========================
+# ==== submodule
+# ===========================
+alias gsub='git submodule'
+alias gsi='gsub init'
+alias gsmu='gsub update --recursive '
+alias gsmud='gsub deinit -f . '
+alias gsmui='gsub update --init --recursive '
+alias gsubsync='gsub sync --recursive'
+alias gsubreset='gsub foreach --quiet --recursive git reset --hard'
+alias gsmudui='gsmud && gsubsync && gsubreset && gsmui'
+
+# ===========================
+# ==== merge
+# ===========================
+alias gm='git merge'
+alias gmom='gm origin/master'
+alias gmum='gm upstream/master'
+alias gmt='git mergetool --no-prompt'
+alias gmtvim='git mergetool --no-prompt --tool=vimdiff'
+
+# ===========================
+# ==== reset
+# ===========================
+alias grset='git reset'
+alias grhh='grset HEAD --hard'
+alias grt='cd $(git rev-parse --show-toplevel || echo ".")'
+alias gru='grset --'
+alias grs='grset --soft'
+alias grh='grset --hard'
+alias gunstage='grset HEAD -- '
+alias guncommit='grset --soft HEAD^ '
+alias gpristine='grset HEAD --hard && git clean -dfx'
+
+# ===========================
+# ==== rebase
+# ===========================
+alias grb='git rebase'
+alias grba='grb --abort'
+alias grbc='grb --continue'
+alias grbi='grb -i'
+alias grbm='grb master'
+alias grbs='grb --skip'
+
+# ===========================
+# ==== remote
+# ===========================
+alias gr='git remote'
+alias gra='gr add'
+alias grmv='gr rename'
+alias grrm='gr remove'
+#alias grset='gr set-url'
+alias grup='gr update'
+alias grv='gr -v'
+
+# ===========================
+# ==== status
+# ===========================
+alias gst='git status'
+alias gsb='gst -sb'
+alias gss='gst -s'
+
+
+# ===========================
+# ==== cherry-pick
+# ===========================
+alias gcp='git cherry-pick'
+alias gcpa='gcp --abort'
+alias gcpc='gcp --continue'
+alias gcps='gcp -s'
+
+# ===========================
+# ==== stash
+# ===========================
+alias gstash='git stash'
+alias gstv='gstash save'
+alias gsta='gstash apply'
+alias gstc='gstash clear'
+#alias gstd='gstash drop'
+alias gstl='gstash list'
+alias gstpop='gstash pop'
+alias gsts='gstash show --text'
+alias gstpsh='git stash push '
+alias gstpshk='git stash push --keep-index '
+#
+## view contents of the stash
+alias gstl='gstash list '
+
+# gstview='gstash show -p'
+function gstview() {
+    local s=("\n## Show the changes recorded in the stash entry as a diff between the stashed contents"
+             "\n## and the commit back when the stash entry was first created\n"
+             "    Usage: gvs|gstview [-h|h|help] [N]; e.g. gvs|gstview [0|1|n]\n"
+             "\t-h|h|help    -- Print this help\n"
+             "\tN            -- Display the Nth entry of the stash\n")
+    case "$#" in
+        '0')
+            git stash show --patch
+            ;;
+        '1')
+            git stash show --patch stash@{$1}
+            ;;
+        *)
+            printUsage "${s[*]}"
+            ;;
+    esac
+    return $?
+}
+function gvs() {
+    gstview "$@"
+}
+
+## gsta='gstash apply'
+function gsta() {
+    local s=("\n## Remove a single stashed state from the stash list and apply it on top of the current working tree state\n"
+             "    Usage: gsa [-h|h|help] [N]; e.g. gsa [0|1|N]\n"
+             "\t-h|h|help    -- Print this help\n"
+             "\tN            -- Remove and apply the Nth entry to current repo\n")
+    case "$#" in
+        '0')
+            git stash apply stash@{0}
+            ;;
+        '1')
+            git stash apply stash@{$1}
+            ;;
+        *)
+            printUsage "${s[*]}"
+            ;;
+    esac
+    return $?
+}
+## gstd='gstash drop'
+function gstd() {
+    local s=("\n## Remove a single stash entry from the list of stash entries\n"
+             "    Usage: gsd [-h|h|help] [N]; e.g. gsd [0|1|N]\n"
+             "\t-h|h|help    -- Print this help\n"
+             "\tN            -- Drop the Nth entry\n")
+    case "$#" in
+        '0')
+            git stash drop stash@{0}
+            ;;
+        '1')
+            git stash drop stash@{$1}
+            ;;
+        *)
+            printUsage "${s[*]}"
+            ;;
+    esac
+    return $?
+}
+
+
+# ===========================
+# ==== Add
+# ===========================
+alias ga='git add '
+alias gaa='ga --all'
+alias gapa='ga --patch'
+alias gau='ga --update'
+alias guidx='ga $(git diff --name-only --cached) '
+
+
+# ===========================
+# ==== Branch
+# ===========================
+alias gb='git branch '
+alias gba='gb -a'
+alias gbd='gb -d'
+alias gbda='gb --no-color --merged | command grep -vE "^(\*|\s*(master|develop|dev)\s*$)" | command xargs -n 1 git branch -d'
+alias gbnm='gb --no-merged'
+alias gbr='gb --remote'
+alias ggsup='gb --set-upstream-to=origin/$(git_current_branch)'
+alias gpsup='gp --set-upstream origin $(git_current_branch)'
+#alias gbd='gb --delete '
+function gbdf() {
+    local s=("## Delete (FORCE) local branch(es)\n"
+    "    Usage: gbdf|gbD b1 b2 ...\n")
+
+    if [[ $# -lt 1 ]]; then printUsage "${s[*]}"
+    else
+        git branch --delete --force $@
+    fi
+    return $?
+}
+alias gbD=gbdf
+
+# delete remote branch
+function gbdr() {
+    local s=("## Delete remote branch(es)\n"
+    "    Usage: gbdr b1 b2 ...\n")
+
+    if [[ $# -lt 1 ]]; then printUsage "${s[*]}"
+    else
+        git push origin --delete $@
+    fi
+    return $?
+}
+
+# ===========================
+# ==== Blame
+# ===========================
+alias gbl='git blame -b -w'
+alias gbs='git bisect'
+alias gbsb='git bisect bad'
+alias gbsg='git bisect good'
+alias gbsr='git bisect reset'
+alias gbss='git bisect start'
+alias gblL='gbl -L'
+
+# ===========================
+# ==== Commit
+# ===========================
+alias gc='git commit '
+alias gcv='gc -v'
+alias gc!='gc -v --amend'
+alias gcn!='gc -v --no-edit --amend'
+alias gca='gc -v -a'
+alias gca!='gc -v -a --amend'
+alias gcan!='gc -v -a --no-edit --amend'
+alias gcans!='gc -v -a -s --no-edit --amend'
+alias gcam='gc -a -m'
+alias gcsm='gc -s -m'
+alias gcmsg='gc -m'
+alias gcs='gc -S'
+alias gamend='gc --amend --no-edit '
+
+# ===========================
+# ==== fetch
+# ===========================
+alias gf='git fetch'
+alias gfa='gf --all --prune'
+alias gfo='gf origin'
+alias gfp='gf --prune --recurse-submodules=yes'
+
+gfg() {
+  git ls-files | grep "$@"
+}
+
+# ===========================
+# ==== push
+# ===========================
+alias gp='git push '
+alias gpd='gp --dry-run'
+alias gpoat='gp origin --all && gp origin --tags'
+alias gpu='gp upstream'
+alias gpv='gp -v'
+alias gpush='gp origin $(git_current_branch)'
+ggf() {
+  [[ "$#" != 1 ]] && local b="$(git_current_branch)"
+  gp --force origin "${b:=$1}"
+}
+
+ggp() {
+  if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
+    gp origin "${*}"
+  else
+    [[ "$#" == 0 ]] && local b="$(git_current_branch)"
+    gp origin "${b:=$1}"
+  fi
+}
+
+# ===========================
+# ==== log
+# ===========================
+alias glog='git log'
+alias glg='glog --stat'
+alias glgp='glog --stat -p'
+alias glgg='glog --graph'
+alias glgga='glog --graph --decorate --all'
+alias glgm='glog --graph --max-count=10'
+alias glo='glog --oneline --decorate'
+alias glol="glog --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias glola="glog --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all"
+#alias glog='glog --oneline --decorate --graph'
+alias gloga='glog --oneline --decorate --graph --all'
+alias glp="_git_log_prettily"
+alias glg='glog --pretty=format:"%C(#cd9a00)%h%C(#0080ff) <%an> %C(#17b062)(%cr) %d%C(#c0d6de)%s" '
+alias g1l='glg --oneline --decorate '
+alias glgf='glg --name-status '
+alias gl1f='glg --name-status '
+alias gtree='glg --decorate --graph '
+alias gtoday='g1l --since=midnight --author=\"$(git config user.name)\" '
+alias gyes='g1l --since=yesterday.midnight --until=midnight --author=\"$(git config user.name)\" '
+alias gmylog='glg --author="$(git config user.name)" '
+alias gmylogext='gl1f --author="$(git config user.name)" '
+alias glast='gl1f --author="$(git config user.name)" -1 HEAD'
+alias grflog='glog -g --abbrev-commit --pretty=format:"%C(#ff4040)%h%C(bold #00ff00) %<|(20)%gD %C(reset)%C(dim #fff600)%<(14)%cr %C(reset)%C(italic #ff00ff)%<(80,trunc)%gs %C(reset)%C(#ffbf00)(%s)"'
+alias grf='git reflog --format="%C(#ff4040)%h%C(bold #00ff00) %<|(20)%gD %C(reset)%C(dim #fff600)%<(14)%cr %C(reset)%C(italic #ff00ff)%<(80,trunc)%gs %C(reset)%C(#ffbf00)(%s)"'
+
+
+## view last commits' diff's
+function glc() {
+    local s=("## Display last N commits\n"
+             "    Usage: glc [-h|h|help] [n <number of commits>]\n"
+             "\tno argument -- display the last 1 commit\n"
+             "\tn <N>       -- display the last N commits\n"
+             "\t-h|h|help   -- Print this help\n")
+    if [[ $# -eq 0 ]]; then glp -p -1
+    else
+        case "$1" in
+            'h'|'-h'|'help')
+                printUsage "${s[*]}"
+                ;;
+            *)
+                glog -p -"$@"
+                ;;
+        esac
+    fi
+    return $?
+}
+
+# ===========================
+# ==== diff
+# ===========================
+
+
+# ===========================
+# ==== worktree
+# ===========================
+alias gwt='git worktree'
+function gwtab() {
+    local s=("\n## add a new worktree, also create a new branch in the worktree\n"
+                "etUsage: gwtab <new-branch> <path> [<commit-ish>]\n"
+                "\te.g. gwtab AQA-xxxx ../hotfix master\n")
+
+    if [[ $# -lt 3 ]]; then printUsage "${s[*]}"; return $?; fi
+
+    gwt add -b $@
+}
+function gwtp {
+    gwt prune
+}
+function gwta {
+    gwt add "$@"
+}
+function gwtl {
+    gwt list --verbose
+}
+function gwtr {
+    printf 'git worktree remove %s' "$@"
+    gwt remove "$@"
+}
+
+
+# ===========================
+# ==== Pull
+# ===========================
+alias gpull='git pull'
+#alias ggpull='gpull origin $(git_current_branch)'
+alias gup='gpull --rebase'
+alias gupv='gpull --rebase -v'
+alias gupa='gpull --rebase --autostash'
+alias gupav='gpull --rebase --autostash -v'
+alias glum='gpull upstream master'
+
+ggl() {
+  if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
+    gpull origin "${*}"
+  else
+    [[ "$#" == 0 ]] && local b="$(git_current_branch)"
+    gpull origin "${b:=$1}"
+  fi
+}
+ggu() {
+  [[ "$#" != 1 ]] && local b="$(git_current_branch)"
+  gpull --rebase origin "${b:=$1}"
+}
+alias gpullu="gfp && gup && gsmudui"
+
+# ===========================
+# ==== checkout
+# ===========================
+# gco branch-name
+function gco() {
+    local s=("## Check out a branch\n"
+             "    Usage: gco [-h|h|help] [-m|m|master\n"
+             "\t-                           : check out previous branch\n"
+             "\t<branch name>               : check out branch\n"
+             "\t-h|h|help                   : show help\n"
+             "\t-m|m|master                 : check out master\n"
+             "\t-b|b|branch <branch name>   : check out <branch name>\n"
+             "\t-u|u|update                 : combine with m|b to update submodules\n"
+             )
+    if [[ -z "$1" ]]; then
+        printUsage "${s[*]}"
+        return $?
+    fi
+
+    my_git_cmd=''
+    local withupdate=0
+    while [ "$1" != "" ]; do
+        case "$1" in
+            '-')
+                my_git_cmd=$(append_str ${my_git_cmd} "-")
+                ;;
+            'm'|'-m'|'master')
+                my_git_cmd=$(append_str ${my_git_cmd} "master")
+                ;;
+            'b'|'-b'|'branch')
+                shift
+                my_git_cmd=$(append_str ${my_git_cmd} "-b" $1)
+                ;;
+            'u'|'-u'|'update')
+                withupdate=1
+                ;;
+            'h'|'-h'|'help')
+                printUsage "${s[*]}"
+                break
+                ;;
+            *)
+                my_git_cmd=$(append_str ${my_git_cmd} $1)
+                ;;
+        esac
+        shift
+    done
+    git checkout $my_git_cmd
+    if [[ $withupdate -ne 0 ]]; then gsmu; fi
+
+    return $?
+}
+alias gco='git checkout '
+alias gcb='gco -b'
+alias gcm='gco master'
+alias gcd='gco -b develop'
+
+# copy files from other branch
+function gcp() {
+    local s=("\n## Copy files from <branch name> to the current branch\n"
+             "    Usage: gcp -b <branch_name> path/filename[..path/filename]\n"
+             "        -b|b|branch <from branch> path/filename[..path/filename]\n")
+    case "$1" in
+        '-b'|'b'|'branch')
+            shift
+            local branch_name="$1"
+            shift
+            git checkout "$branch_name" -- "$@"
+            ;;
+        *)
+            printUsage "${s[*]}"
+            ;;
+    esac
+    return $?
+}
+
+# ===========================
+# ==== diff
+# ===========================
+alias gd='git diff '
+alias gdca='gd --cached'
+alias gdt='gd-tree --no-commit-id --name-only -r'
+alias gdw='gd --word-diff'
+alias gdct='git describe --tags `git rev-list --tags --max-count=1`'
+
+gdv() {
+  gd -w "$@" | view -
+}
+
+## gdiff branch
+function gdiff() {
+    local s=("\n## Compare files between branches\n"
+             "    Usage: gdiff <branch name> [path/filename...]\n"
+             "\t<branch>                     -- Compare all files in current branch with <branch>\n"
+             "\t<branch> [path/filename...]  -- Compare [filename(s)] in current branch with <branch>\n")
+    if [[ $# -lt 1 ]]; then
+        printUsage "${s[*]}"
+    else
+        local CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+        local OTHER_BRANCH="$1"
+        shift
+        git diff "$OTHER_BRANCH" "$CURRENT_BRANCH" "$@"
+    fi
+}
+
+function grnlocal() {
+    local s=("## Rename local branch\n"
+    "    Usage: grnlocal old_name new_name\n")
+
+    if [[ $# -lt 2 ]]; then printUsage "${s[*]}"
+    else
+        local eval old_branch="$1"
+        local eval new_branch="$2"
+        git branch -m $old_branch $new_branch
+    fi
+    return $?
+}
+alias gbml='grnlocal'
+
+function grnremote() {
+    local s=("## Rename remote branch\n"
+    "    Usage: grnremote old_name new_name\n")
+
+    if [[ $# -lt 2 ]]; then printUsage "${s[*]}"
+    else
+        local eval old_branch="$1"
+        local eval new_branch="$2"
+        #-- rename branch locally
+        git branch -m $old_branch $new_branch
+        #-- delete the old_branch
+        git push origin --delete $old_branch
+        #-- push the new branch and set local branch to track new rename
+        git push --set-upstream origin $new_branch
+    fi
+    return $?
+}
+alias gbmr='grnremote'
+
+# ===========================
+# ==== Miscellaneous
+# ===========================
+alias gcf='git config --list'
+alias gcl='git clone --recursive'
+alias gclean='git clean -fd'
+alias gcount='git shortlog -sn'
+
+alias ghh='git help'
+
+
+## To exclude locally modified files from index
+#alias gignore='git update-index --assume-unchanged'
+function gignore() {
+    local s=("\n## Exclude locally modified files from index\n"
+             "    Usage: gig|gignore path/file_to_ignore\n")
+    if [[ $# -lt 1 ]]; then
+        printUsage "${s[*]}"
+    else
+        git update-index --skip-worktree "$@"
+        git update-index --assume-unchanged "$@"
+    fi
+}
+function gig() {
+    gignore
+}
+alias gignored='git ls-files -v | grep "^[[:lower:]]"'
+
+alias gsunapply='gstash show -p | git apply -R'
+alias gsreverse='gstash show -p | git apply --reverse'
+
+alias gts='git tag -s'
+alias gtv='git tag | sort -V'
+
+#alias gunignore='git update-index --no-assume-unchanged'
+function gunignore() {
+    local s=("\n## Let git manage locally modified files\n"
+             "    Usage: guig|gunignore path/file_to_ignore\n")
+    if [[ $# -lt 1 ]]; then
+        printUsage "${s[*]}"
+    else
+        git update-index --no-skip-worktree "$@"
+        git update-index --no-assume-unchanged "$@"
+    fi
+}
+function guig() {
+    gunignore
+}
+
+alias gunwip='git log -n 1 | grep -q -c "\-\-wip\-\-" && git reset HEAD~1'
+
+
+alias gwch='git whatchanged -p --abbrev-commit --pretty=medium'
+alias gwip='ga -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify -m "--wip-- [skip ci]"'
+
+## to view HEAD's SHA-1 hash
+alias ghm='git show-ref master'
+#alias gh='git rev-parse --verify HEAD'
+function display_branch_sha1() {
+    git for-each-ref --format='%(refname)' refs/heads  | while read x ; do git show-ref --verify "$@" $x; done
+}
+function gh() {
+    local s=("\n## Display sha-1 hash of branch(es)\n"
+             "    Usage: gh [-h|h|help] [-m|m|master] [-s|s|short]\n"
+             "\t-h|h|help    -- Print this help\n"
+             "\t-r|r|remote  -- show remote masters only. Can combine with -s|s\n"
+             "\t-m|m|master  -- show local masters only. Can combine with -s|s\n"
+             "\t-l|l|local   -- show all local branches. Can combine with -s|s\n"
+             "\t-s|s|short   -- shortened object names\n"
+    )
+    if [[ $# -eq 0 ]]; then
+        display_branch_sha1 --abbrev
+        return $?
+    fi
+    local short=0
+    local repo=0
+    while [ "$1" != "" ]; do
+        case "$1" in
+            'r'|'-r'|'remote')
+                repo=0
+                ;;
+            'm'|'-m'|'master')
+                repo=1
+                ;;
+            'l'|'-l'|'local')
+                repo=2
+                ;;
+            's'|'-s'|'short')
+                short=1
+                ;;
+            *)
+                printUsage "${s[*]}"
+                ;;
+        esac
+        shift
+    done
+
+    my_git_cmd=''
+    case $repo in
+        0)
+            my_git_cmd='rev-parse --verify'
+            if [[ $short -eq 1 ]]; then my_git_cmd=$(append_str ${my_git_cmd} "--short"); fi
+            ;;
+        1)
+            my_git_cmd='show-ref --heads'
+            if [[ $short -eq 1 ]]; then my_git_cmd=$(append_str ${my_git_cmd} "--abbrev"); fi
+            my_git_cmd=$(append_str ${my_git_cmd} " master")
+            ;;
+        2)
+            my_git_cmd="for-each-ref --format=\"%(refname)\" refs/heads  | while read x ; do git show-ref --verify $x; done"
+            git $my_git_cmd
+            return
+            if [[ $short -eq 1 ]]; then display_branch_sha1 --abbrev
+            else
+                display_branch_cha1
+            fi
+            return $?
+            ;;
+    esac
+
+    git $my_git_cmd
+    return $?
+}
+#alias ghs='git rev-parse --short --verify HEAD'
+#alias ghremote='git rev-parse --verify refs/remotes/origin/HEAD'
+
+
+function gcurrbranchname() {
+    # CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+    git rev-parse --abbrev-ref HEAD
+}
+alias gcbn='gcurrbranchname '
+
+## gmb = git merge-base
+function gmb() {
+    local s=("\n## git merge-base: finds best common ancestor(s) between two commits\n"
+             "    Usage: gmb [-h|h|help] [-m|m|master] <commit hash>\n"
+             "\t-h|h|help    -- Print this help\n"
+             "\t-m|m|master  -- Find the point at which branch forked from master\n"
+             "\t<commit>     -- Find the ancestor of <commit> and current HEAD\n")
+    #local CURRENT_BRANCH="$(git rev-parse --verify HEAD)"
+    local CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+    if [[ $# -eq 0 ]]; then printUsage "${s[*]}"; return $?; fi
+    case "$1" in
+        '-h'|'h'|'help')
+            printUsage "${s[*]}"
+            ;;
+        '-m'|'m'|'master')
+            git merge-base --fork-point master "$CURRENT_BRANCH"
+            ;;
+        *)
+            git merge-base "$@"
+            ;;
+    esac
+    return $?
+}
+#

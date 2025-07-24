@@ -1,0 +1,115 @@
+----------------------------------------------------------------------------------------------
+-- How to Securely Delete Files in Windows 10 With PowerShell and Cipher
+----------------------------------------------------------------------------------------------
+
+1. Press the Windows Key + S and begin typing PowerShell
+2. right-click on Windows PowerShell and Run as Administrator.
+3. cipher /w:C:<path to folder to delete>
+    e.g. cipher /w:C:
+If you don't know the full path, open File Explorer, This PC, C:, and find the folder you want to wipe securely.
+right-click near the last word and select Copy address as text.
+
+Sometimes Cipher will leave behind a folder and files called EFSTMPWP. Just delete it.
+
+----------------------------------------------------------------------------------------------
+-- VIM
+----------------------------------------------------------------------------------------------
+1. How to execute .py files in Vim
+From Vim window, type
+    :w !python -
+or  :! python file.py
+
+2.a Search for control symbols only
+    /[[:cntrl:]]
+
+2.a Search for non-printable characters (non-ASCII characters also)
+    /[^[:print:]]
+
+2.c Replace control symbols only
+    %s/[[:cntrl:]]/pattern/g
+
+2.d Replace non-printable characters (non-ASCII characters also)
+    %s/[^[:print:]]/pattern/g
+
+3.a Delete lines not matching pattern
+    %!g/pattern/d
+    %v/pattern/d
+
+3.b Delete lines not matching patterns
+    %!g/pattern_1\|pattern_2\|..\|pattern_n/d
+    %v/pattern_1\|pattern_2\|..\|pattern_n/d
+
+----------------------------------------------------------------------------------------------
+-- grep
+----------------------------------------------------------------------------------------------
+1.  Regex patterns
+$ grep -irn "^[^:]*\.txt"
+        ^       - the start of the line
+        [^:]*   - followed by a sequence of any characters except a colon
+        \.      - followed by a dot (the dot has a special meaning in regex, must escape with a backslash to express a literal match)
+        txt     - search pattern
+
+$ grep '[0-9][0-9][0-9]' *  <- search for a sequence of 3 integers
+
+2.  Filtering files by their name
+$ grep -ir 'pattern' ./ --include='*.sql'
+
+3.  Find non-matching files: -L option
+$ grep -iL 'pattern' 'path'
+
+4.  Search word only: -w option to select only lines containing matches that form whole words
+$ grep -w 'word' 'path'
+
+5.  Search multiple patterns at one time: use egrep (extended grep)
+$ egrep -w 'word1|word2|word3' 'path'
+$ egrep -i 'apple|banana|orange' *
+
+6.  Invert match: -v option (matches only those lines that do not contain the given word)
+$ grep -v 'word' 'path'
+
+7.  Showing lines before/after a grep pattern match
+$ grep -B 5 "pattern" 'file'    # -B option - Show 5 line before
+$ grep -A 5 "pattern" 'file'    # -A option - Show 5 line after
+$ grep -B5 -A7 'pattern' 'file  # five lines before and 7 lines after
+
+8.  Power file searching with find and grep
+$ find . -type f -exec grep -il 'foo' {} \;
+    '.'                     means "look in the current directory"
+    '-type f'               means "look in files only"
+    '-exec grep -il foo'    means "search for the string 'foo' and return the matching line and filename
+    '{} \;'                 is a little bizarre syntax that need be added to the end of the find command
+                            whenever you add the -exec option. Think of it as a placeholder for the
+                            filenames the find command finds.
+
+9.  Multiple search strings, multiple filename patterns:
+    find all files named "*.h,cpp" containing both 'nullptr' and 'shared_ptr'
+$ grep -li "nullptr" $(find . -name "*.h,cpp" -exec grep -li "shared_ptr" {} \;)
+
+10. grep to search for patterns in multiple files
+$ grep -irn --include="*.{h,cpp,xml}" 'pattern' /path
+$ grep -irn --include=*.h --include=*.cpp --include=*.xml 'pattern' /path
+$ find /some/path/ -name "*.htm*" -or -name "*.php" | xargs grep 'pattern'
+
+----------------------------------------------------------------------------------------------
+-- find
+find [options] [paths] [expression]
+----------------------------------------------------------------------------------------------
+1.  List all files found in the current hierarchy [recursive]
+$ find . /path
+
+2.  Search for a file by the name abc [recursive]
+$ find ./ -name 'filename'
+
+3.  Search for a directory by the name 'xyz' [recursive]
+$ find ./ -type d -name xyz
+
+4.  Search recursively for a file by the name abc.txt, and prompt the user to delete each match.
+$ find ./ -name abc.txt -exec rm -i {} \;
+
+Note that the “{}” string is substituted by the actual file name while running and that
+the “\;” string is used to terminate the command to be executed.
+
+5.
+----------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
