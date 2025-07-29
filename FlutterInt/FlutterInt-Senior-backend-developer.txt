@@ -1,0 +1,159 @@
+-- Senior backend developer
+
+Role   Overview
+
+We are looking for a talented Node.js Developer to join our team. The ideal candidate will work primarily on building and maintaining scalable backend application and services using Node.js, contributing to a robust and high-performance backend infrastructure that powers a seamless user experience across our platforms. 
+
+The ideal candidate will not only develop but also mentor team members, lead technical discussions, and help shape the backend architecture and best practices. 
+
+This role is perfect for someone passionate about clean, maintainable code, API best practices, and continuous improvement. Familiarity with distributed systems, microservices, state management, and performance optimization for server-side applications is a strong advantage. 
+
+This role follows a hybrid approach to working, allowing you to combine working from home with working in our modern offices. You and your manager will agree on the best working pattern that suits both of you. We’ll kit you out to work remotely, but we know that collaboration is key to our success, and spending quality time together helps us stay aligned with our mission.  
+
+What you’ll do:    
+
+    Lead and participate in technical design discussions and decision-making 
+
+    Mentor and guide junior and mid-level developers within the team 
+
+    Identify areas for improvement in backend architecture and drive technical excellence 
+
+    Proactively contribute to the improvement of development processes and standards 
+
+    Develop and maintain scalable and maintainable backend services and APIs using Node.js 
+
+    Design and implement RESTful APIs, and work with real-time technologies (e.g., like WebSockets where needed) 
+
+    Collaborate with other squads, DevOps engineers, product owners, and stakeholders to deliver robust and secure backend solutions 
+
+    Integrate with databases (SQL and NoSQL), message brokers, third-party services, and external APIs 
+
+    Write clean, reusable, and testable code following best practices in backend development and architecture 
+
+    Debug, troubleshoot, and optimize backend services for performance, scalability, and security 
+
+    Contribute to documentation, including API usage, architectural decisions, and backend-specific guidelines 
+
+    Ensure backend services are secure, efficient, and resilient 
+
+    Participate in peer code reviews and uphold high standards for code quality and consistency across the backend team 
+
+    Perform related duties as assigned 
+
+What you’ll bring:   
+
+    Working Experience: 5+ years of professional experience in mobile development, with a strong focus on building applications using Node.js 
+
+    Proven experience in leading complex backend projects and mentoring developers 
+
+    Strong hands-on experience with modern TypeScript Node.js development paradigms 
+
+    Hands-on experience designing and integrating RESTful APIs 
+
+    Strong understanding of backend architecture, scalability, microservices, and API security best practices 
+
+    Experience with Git and collaborative workflows (e.g., GitHub/GitLab) 
+
+    Experience with unit, integration, and end-to-end testing frameworks (e.g., Jest, Mocha, Supertest) 
+
+    Familiarity with CI/CD pipelines, containerization (Docker), and orchestration tools (e.g., Kubernetes) is a plus 
+
+    Experience with cloud platforms like AWS or other major cloud providers is a strong plus. 
+
+Knowledge:  
+
+    Deep expertise in Node.js ecosystem and advanced understanding of TypeScript 
+
+    Strong experience in optimizing backend applications for scalability, maintainability, and performance 
+
+    Good grasp of microservice architecture, distributed systems, and asynchronous processing patterns (e.g., queues, Kafka, RabbitMQ) 
+
+    Proficient in version control using Git, working in collaborative Git-based workflows, and experienced with monorepo setups 
+
+    Understanding of authentication and authorization mechanisms (OAuth2, JWT, OpenID Connect) 
+
+    Knowledge of relational (PostgreSQL, MySQL) and non-relational (MongoDB, Redis) databases 
+
+    Knowledge of Nest.js would be an advantage 
+
+    Understanding of security principles for web and API development (e.g., OWASP Top Ten) 
+
+    Familiarity with infrastructure as code tools (e.g., Terraform, CloudFormation) is a plus 
+
+    Knowledge of Nest.js would be a plus
+
+    Proficient in written and verbal English communication 
+
+  Personal Attributes  
+
+    Analytical and synthesis skills 
+
+    Problem-solving skills 
+
+    Autonomy and resourcefulness 
+
+    Sense of initiative 
+
+    Attention to detail 
+
+    Flexibility in organizing work 
+
+    Leadership and mentorship abilities 
+
+    Strong decision-making and ownership mindset 
+
+    Ability to work as part of a team 
+
+    Ability to adapt to change 
+
+    Results driven. 
+
+
+
+About Singular    
+
+Singular is an international iGaming software provider headquartered in Malta, with offices in North Macedonia and Georgia. We provide our platform solutions to some of the most innovative and well-known brands in the sports betting and gaming industry.  
+
+As of 2021, we're part of Flutter International, the world’s leading online sports betting and iGaming operator. Together, we create the future of entertainment – and you can join us too.   
+
+Why choose us  
+
+    
+
+At Singular, people have access to vast opportunities for career growth and self-development. Our employee benefits package goes far beyond offering the minimum: We support our people in becoming their best version at work and beyond - and our benefits reflect that commitment.   
+
+These are some of the benefits included in our employee package:   
+
+    Generous annual leave  
+
+    Hybrid work
+
+    Private health insurance  
+
+    Paid sick leave  
+
+    Paid maternity & paternity leave  
+
+    Family reward of €1000  
+
+    Performance & referral bonuses  
+
+    Team morale budget  
+
+    Loyalty award  
+
+Equal opportunities    
+
+As a brand of Flutter International, we are committed to creating an inclusive environment where our people can be their authentic selves and thrive. We embrace and celebrate diversity, respecting all our uniqueness and differences.  
+
+We welcome you to let us know whether you have any accessibility needs. All you need to do is email us at   jobs@singular.uk . Your journey with us is focused on ensuring you have what you need to be your best self.  
+
+Learn more about the works we are doing on Inclusion and belonging here:  https://careers.flutterinternational.com/working-at-flutter-international/diversity-equity-inclusion/    
+
+The Group     
+
+Singular is a proud member of the Flutter Entertainment family, a global leader in sports betting, iGaming, and entertainment. We're not just another company; we're listed on both the prestigious FTSE 100 index on the London Stock Exchange and the New York Stock Exchange (NYSE).   
+
+What sets us apart is our world class brands, cutting-edge products, and our international division includes our operations in over 100 global markets and offers sports betting, casino, poker, rummy and lottery, mainly online.   
+
+What truly defines us is our commitment to ensuring that the excitement of gaming and entertainment is experienced in a responsible and sustainable way. Our remarkable team of over 8,000 colleagues drives this vision, spread across 28 offices worldwide.

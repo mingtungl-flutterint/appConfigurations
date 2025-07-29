@@ -1,0 +1,119 @@
+SDE-II Game Developer
+
+Job Overview:
+As our Game Developer (Unity), you will be an integral part of our growing engineering team, owning core game modules and contributing to the design, development, and optimization of high-performance game systems. You should be an expert in Unity Game Development with hands-on experience in C# and JavaScript. Additionally, experience with JavaScript, NodeJS, or similar technologies is a plus. You will collaborate closely with cross-functional teams, guide junior developers, and ensure the delivery of high-quality, scalable real-money gaming experiences for iOS and Android platforms. You will also have the opportunity to integrate AI into game mechanics, driving innovation by putting forward new-edge ideas that enhance gameplay and player experience. Strong communication, creativity, and analytical skills are key as you participate in the full development lifecycle, from requirement analysis to testing and delivery.
+
+Job Location : Bangalore
+ 
+
+Key Responsibilities:
+
+    Contribute to the design, development, and optimization of key game features and systems using Unity3D.
+
+    Participate in requirement analysis, design, development, and testing.
+
+    Take responsibility for large technical deliverables and execute them in an exemplary manner.
+
+    Mentor and guide team members on everything from structured problem-solving to the development of best practices.
+
+    Collaborate with cross-functional teams, including designers, artists, and other developers, to improve existing game mechanics and systems.
+
+    Implement and maintain high-quality, efficient, and scalable code.
+
+    Develop, test, and ship mobile games for iOS and Android using Unity.
+
+    Optimize games for performance and scalability across multiple platforms.
+
+    Work on enhancing and refining features in existing games, addressing technical debt, and solving any development challenges.
+
+    Contribute to the development of project estimates, scheduling, and deliverables.
+
+    Write and maintain clear, concise technical documentation.
+
+    Troubleshoot and debug game-related issues, ensuring smooth and consistent gameplay experiences.
+
+    Work closely with the QA team to determine testing requirements, ensuring full coverage and the best quality of the product.
+
+    Stay updated on the latest Unity features and industry trends, applying them where appropriate to improve game development processes.
+
+    Contribute to team discussions, provide input on project goals, and offer suggestions to continuously enhance the quality of the products.
+     
+
+Qualifications & skills required:
+
+    BE/B. Tech. in Computer Science or an MCA from a reputed university.
+
+    2-6 years of experience in Unity game development, with familiarity in frameworks such as COCOS 2dx, libGDX, flames or any other game development framework.
+
+    Hands-on experience with C# and/or JavaScript.
+
+    Proven experience in mobile game development, with the ability to build and ship iOS and Android apps using Unity.
+
+    Must have experience working with WebSocket or any duplex connection-based game development.
+
+    Strong problem-solving abilities, with a focus on optimizing game systems and features.
+
+    Proven ability to identify and resolve memory-related issues to enhance game performance.
+
+    Deep knowledge of a fundamental Unity pipeline or tool, such as Asset Management, UI, or Networking.
+
+    Familiarity with Unity Asset Bundles.
+
+    Experience with third-party SDK integration.
+
+    Strong communication skills and the ability to lead projects effectively.
+
+    Familiarity with Flutter  is a plus.
+
+    Experience with CI/CD pipelines in the game development process is advantageous.
+
+    Knowledge of integrating AI into game mechanics and using AI to enhance gameplay.
+     
+
+Be a part of Junglee Games to:
+
+    Meaningful global exposure and opportunity to represent Junglee as part of Flutter Entertainment, the largest real-money gaming company in the world
+
+    Ample learning opportunities and to work with some of the best industry leaders and minds
+
+    Being a part of a vibrant, intelligent, and rapidly growing team.
+
+    In-depth understanding of the gaming ecosystem.
+
+    Competitive Compensation and Incentives.
+
+    Excellent work environm
+
+    ent, great culture, and global exposure.
+
+Know more about us 
+
+    Explore the world of Junglee Games through our website, www.jungleegames.com .
+
+    Get a glimpse of what Life at Junglee Games looks like on LinkedIn .
+
+    Here is a quick snippet of the Junglee Games Offsite’24
+
+Liked what you saw so far? Be A Junglee
+The Team
+Group (80)
+
+26 roles
+Technology
+
+Technology is at the heart of everything we do in Flutter International. With our always-up, always-available service, we’re working at the top of our game – using the best methodologies and operations. We focus on results and prioritize the innovation and latest technology that will help us get there. Our technology jobs are ideal for those who are driven by achieving the best outcome, every time.
+
+Our people are:
+
+- Team players;
+
+- Driven by detail;
+
+- Inquisitive and curious;
+
+Have a look at our current live vacancies and apply now.
+More About Technology
+SDE-II Game Developer
+
+    Bengaluru, India 
+
