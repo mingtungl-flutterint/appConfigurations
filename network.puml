@@ -1,0 +1,81 @@
+@startuml
+
+!define osaPuml https://raw.githubusercontent.com/Crashedmind/PlantUML-opensecurityarchitecture2-icons/master
+!include osaPuml/Common.puml
+!include osaPuml/User/all.puml
+!include osaPuml/Hardware/all.puml
+!include osaPuml/Misc/all.puml
+!include osaPuml/Server/all.puml
+!include osaPuml/Site/all.puml
+
+hide stereotype
+
+
+' Users
+'osa_user_green_developer(Mary, "Mary", "Product team", "Developer")
+'osa_user_green_operations(Ivan, "Ivan", "IT Team", "Server Admin")
+'osa_user_green_business_manager(Bob, "Bob", "Accounts team", "Manager")
+
+' Wireless networks
+together {
+osa_wireless_network(wn1,"wildwildweb","5G")
+osa_wireless_network(wn2,"wildworldweb","5G")
+osa_wireless_network(wn3,"wildworldiot","2,4G")
+}
+
+' Wireless APs 
+together {
+osa_device_wireless_router(wap1, "Green", "eap723")
+osa_device_wireless_router(wap2, "Yellow", "eap723")
+osa_device_wireless_router(wap3, "Red", "eap245")
+}
+
+' Devices
+together {
+'osa_desktop(pc, "192.168.1.10", "Windows 10", "PC")
+'osa_laptop(mac, "192.168.1.12", "Mac", "Mac")
+osa_server_terminal(jaco, "jaco", "192.168.?.27", "rhel10")
+osa_server_terminal(saro, "saro", "192.168.?.29", "Debian 13")
+'osa_iPhone(iphone, "Dynamic IP", "iPhone 11", "Phone")
+'osa_iPhone(android, "Dynamic IP", "Android 10", "Phone")
+}
+
+' Network
+osa_server(x96, "x96", "192.168.?.23", "Debian")
+osa_server(pve, "pve", "192.168.?.22", "Proxmox VE")
+osa_hub(sw1, "Optical", "192.168.3.14")
+osa_hub(sw2, "yulinca", "192.168.3.12")
+osa_hub(sw3, "TrendNet", "192.168.3.13")
+osa_firewall(firewall, "pfSense", "192.168.?.5")
+osa_cloud(cloud, "Internet", "Fiber")
+
+pve -u- "trunk" x96
+pve -r- "trunk" jaco
+pve -l- "trunk" saro
+pve -d- "trunk" sw2
+'mac -d- sw2
+'pc -d- sw2
+
+wn1 -- wap1
+wn2 -- wap1
+wn3 -- wap1
+wn1 -- wap2
+wn2 -- wap2
+wn3 -- wap2
+wn1 -- wap3
+wn2 -- wap3
+wn3 -- wap3
+
+sw3 "trunk" -u- wap1
+sw3 "trunk" -u- wap2
+sw3 "trunk" -u- wap3
+
+sw1 "trunk" -r- sw2: 10Gbps
+sw1 "trunk" -l- sw3: 1Gbps
+
+sw1 "trunk" -- firewall
+
+firewall -- cloud
+
+footer rendered with PlantUML version %version()\nML
+@enduml
