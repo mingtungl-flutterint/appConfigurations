@@ -28,6 +28,7 @@ alias fix_stty='stty sane'                  # fix_stty:     Restore terminal set
 alias fix_term='echo -e "\033c"'            # fix_term:     Reset the conosle.  Similar to the reset command
 alias cic='set completion-ignore-case On'   # cic:          Make tab-completion case-insensitive
 alias src='source ~/.bashrc'                # src:          Reload .bashrc file
+alias x='exit'
 alias h='history'
 alias j='jobs -l'
 alias which='type -a'
@@ -67,7 +68,10 @@ alias tree='tree -Csuh'    #  Nice alternative to 'recursive ls' ...
 #   lr:  Full Recursive Directory Listing
 #   ------------------------------------------
 #alias lr='ls -R | grep ":$" | sed -e '\''s/:$//'\'' -e '\''s/[^-][^\/]*\//--/g'\'' -e '\''s/^/   /'\'' -e '\''s/-/|/'\'' | less'
+alias tree='tree -Csuh'    #  Nice alternative to 'recursive ls' ...
 
+alias du='du -kh'    # Makes a more readable output.
+alias df='df -kTh'
 alias dud='du -d 1 -h'                      # Short and human-readable file listing
 alias duf='du -sh *'                        # Short and human-readable directory listing
 
