@@ -26,7 +26,8 @@ opt.autowrite = true -- Enable auto write
 -- only set clipboard if not in ssh, to make sure the OSC 52
 -- integration works automatically. Requires Neovim >= 0.10.0
 opt.backspace = "indent,eol,start"  -- Backspace for dummies
-opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
+-- opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
+opt.clipboard = "unnamedplus"
 opt.cindent = true
 opt.complete = add {"kspell"}
 opt.completeopt = add {"menuone", "noselect", "noinsert", "longest"} -- Completion options

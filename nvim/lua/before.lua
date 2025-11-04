@@ -1,6 +1,7 @@
 -- $Id lua/before.lua
 -- vim:set ts=2 sw=2 sts=2:
 --
+
 local function bootstrap_pckr()
   local pckr_path = vim.fn.stdpath("data") .. "/pckr/pckr.nvim"
 
